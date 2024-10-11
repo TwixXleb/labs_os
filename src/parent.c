@@ -52,7 +52,7 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     }
 
     fclose(input);
-    close(pipe1[1]);  // Закрываем канал для записи
+    close(pipe1[1]);  // Закрываем каналы после отправки всех данных
     close(pipe2[1]);
 
     wait(NULL);  // Ожидаем завершения дочерних процессов
