@@ -2,6 +2,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-void print_hello();
+void remove_vowels(char* str);
 
 #endif

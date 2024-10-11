@@ -1,16 +1,23 @@
-.PHONY: build run test
 
-build: clean-build
-	mkdir build
-	git submodule init
-	git submodule update
-	cd ./build; cmake ..; make all
+CC=gcc
+CFLAGS=-Iinclude
 
-run:
-	./build/*_exe
+all: main
 
-test:
-	./build/*_test
+main: src/parent.o src/child.o src/utils.o test/test.o
+	$(CC) -o main src/parent.o src/child.o src/utils.o test/test.o
 
-clean-build:
-	rm -rf ./build/
+src/parent.o: src/parent.c
+	$(CC) $(CFLAGS) -c src/parent.c
+
+src/child.o: src/child.c
+	$(CC) $(CFLAGS) -c src/child.c
+
+src/utils.o: src/utils.c
+	$(CC) $(CFLAGS) -c src/utils.c
+
+test/test.o: test/test.c
+	$(CC) $(CFLAGS) -c test/test.c
+
+clean:
+	rm -f *.o main

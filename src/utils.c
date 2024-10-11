@@ -1,7 +1,16 @@
 
 #include <stdio.h>
+#include <string.h>
+#include "../include/utils.h"
 
-// Пример заглушки для файла utils.c
-void print_hello() {
-    printf("Hello from utils!\n");
+void remove_vowels(char* str) {
+    char* p = str;
+    while (*p) {
+        if (*p != 'a' && *p != 'e' && *p != 'i' && *p != 'o' && *p != 'u' &&
+            *p != 'A' && *p != 'E' && *p != 'I' && *p != 'O' && *p != 'U') {
+            *str++ = *p;
+        }
+        p++;
+    }
+    *str = '\0';
 }

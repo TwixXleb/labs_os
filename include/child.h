@@ -2,6 +2,6 @@
 #ifndef CHILD_H
 #define CHILD_H
 
-void remove_vowels(char* str);
+void child_process(int pipe_in, const char* file_name);
 
 #endif
