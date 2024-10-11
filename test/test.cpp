@@ -41,18 +41,24 @@ protected:
 };
 
 TEST_F(Lab1Test, ParentChildProcessTest) {
-    // Запускаем родительский процесс, который работает с input.txt и двумя выходными файлами
+    std::cout << "Starting parent process\n";
     parent_process(inputFile, outputFile1, outputFile2);
+    std::cout << "Parent process finished\n";
 
     // Проверяем, что выходные файлы созданы
     std::ifstream file1Stream(outputFile1);
     std::ifstream file2Stream(outputFile2);
-    ASSERT_TRUE(file1Stream.is_open());
-    ASSERT_TRUE(file2Stream.is_open());
+    ASSERT_TRUE(file1Stream.is_open()) << "Failed to open output1.txt";
+    ASSERT_TRUE(file2Stream.is_open()) << "Failed to open output2.txt";
+
+    std::cout << "Output files are open\n";
 
     // Читаем содержимое файлов
     std::string file1Content((std::istreambuf_iterator<char>(file1Stream)), std::istreambuf_iterator<char>());
     std::string file2Content((std::istreambuf_iterator<char>(file2Stream)), std::istreambuf_iterator<char>());
+
+    std::cout << "File1 content: " << file1Content << "\n";
+    std::cout << "File2 content: " << file2Content << "\n";
 
     // Проверяем, что во всех строках гласные удалены
     ASSERT_EQ(file1Content.find_first_of("AEIOUaeiou"), std::string::npos);
