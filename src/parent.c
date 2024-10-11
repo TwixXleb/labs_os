@@ -6,18 +6,18 @@
 #include <time.h>
 #include "../include/child.h"
 
-void parent_process(const char* file1, const char* file2) {
+void parent_process(const char* inputFile, const char* file1, const char* file2) {
     int pipe1[2], pipe2[2];
-    
-    // Create pipes
+
+    // Создаем каналы
     if (pipe(pipe1) == -1 || pipe(pipe2) == -1) {
-        perror("Failed to create pipes");
+        perror("Ошибка создания pipe");
         exit(1);
     }
 
     pid_t child1_pid = fork();
     if (child1_pid == 0) {
-        close(pipe1[1]);  // Close unused write end
+        close(pipe1[1]);  // Закрываем конец для записи
         child_process(pipe1[0], file1);
         close(pipe1[0]);
         exit(0);
@@ -25,30 +25,36 @@ void parent_process(const char* file1, const char* file2) {
 
     pid_t child2_pid = fork();
     if (child2_pid == 0) {
-        close(pipe2[1]);  // Close unused write end
+        close(pipe2[1]);  // Закрываем конец для записи
         child_process(pipe2[0], file2);
         close(pipe2[0]);
         exit(0);
     }
 
-    // Parent process: send data
-    close(pipe1[0]);  // Close unused read end
-    close(pipe2[0]);  // Close unused read end
+    // Родительский процесс: читает строки из input.txt
+    close(pipe1[0]);  // Закрываем конец для чтения
+    close(pipe2[0]);
 
-    srand(time(NULL));  // Seed for randomness
-    char* strings[] = {"First example string", "Another input", "Random text for testing"};
-    
-    for (int i = 0; i < 3; i++) {
+    srand(time(NULL));  // Инициализация случайных чисел
+    char buffer[256];
+    FILE* input = fopen(inputFile, "r");
+    if (!input) {
+        perror("Не удалось открыть input.txt");
+        exit(1);
+    }
+
+    while (fgets(buffer, sizeof(buffer), input)) {
         if (rand() % 100 < 80) {
-            write(pipe1[1], strings[i], strlen(strings[i]));
+            write(pipe1[1], buffer, strlen(buffer));
         } else {
-            write(pipe2[1], strings[i], strlen(strings[i]));
+            write(pipe2[1], buffer, strlen(buffer));
         }
     }
 
-    close(pipe1[1]);  // Close write ends after sending data
+    fclose(input);
+    close(pipe1[1]);  // Закрываем канал для записи
     close(pipe2[1]);
 
-    wait(NULL);  // Wait for child processes to finish
+    wait(NULL);  // Ожидаем завершения дочерних процессов
     wait(NULL);
 }
