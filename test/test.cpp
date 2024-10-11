@@ -5,6 +5,7 @@
 extern "C" {
 #include "../include/child.h"  // Функция обработки строк
 #include "../include/parent.h"
+#include "../include/utils.h"
 }
 
 class Lab1Test : public testing::Test {
@@ -25,6 +26,17 @@ protected:
         input << "Just a string\n";
         input << "Final line\n";
         input.close();
+    }
+
+    void TearDown() override {
+        auto removeIfExists = [](const char *path) {
+            if (std::filesystem::exists(path)) {
+                std::filesystem::remove(path);
+            }
+        };
+        removeIfExists(inputFile);
+        removeIfExists(outputFile1);
+        removeIfExists(outputFile2);
     }
 };
 

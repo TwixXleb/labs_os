@@ -44,17 +44,22 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     }
 
     while (fgets(buffer, sizeof(buffer), input)) {
+        printf("Parent: read line: %s", buffer);
         if (rand() % 100 < 80) {
+            printf("Parent: writing to pipe1\n");
             write(pipe1[1], buffer, strlen(buffer));
         } else {
+            printf("Parent: writing to pipe2\n");
             write(pipe2[1], buffer, strlen(buffer));
         }
     }
 
     fclose(input);
+    printf("Parent: closing pipe1 and pipe2\n");
     close(pipe1[1]);  // Закрываем каналы после отправки всех данных
     close(pipe2[1]);
 
+    printf("Parent: waiting for child processes to finish\n");
     wait(NULL);  // Ожидаем завершения дочерних процессов
     wait(NULL);
 }
