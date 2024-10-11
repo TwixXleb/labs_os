@@ -5,7 +5,7 @@ project(OS_LABS C CXX)
 
 # Устанавливаем стандарт для C и C++
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
 # Добавляем опции компиляции только для Linux
 if (UNIX)
