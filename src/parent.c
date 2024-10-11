@@ -45,9 +45,6 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
 
     // Чтение строк из файла
     while (fgets(buffer, sizeof(buffer), input_fp)) {
-        // Очищаем буфер перед каждым чтением
-        memset(buffer, 0, sizeof(buffer));
-
         // Убираем символ новой строки
         buffer[strcspn(buffer, "\n")] = 0;
 
@@ -66,6 +63,9 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
                 perror("Ошибка записи в pipe2");
             }
         }
+
+        // Очищаем буфер после обработки строки
+        memset(buffer, 0, sizeof(buffer));
     }
 
     fclose(input_fp);
