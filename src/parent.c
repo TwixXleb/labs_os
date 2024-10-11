@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,29 +36,34 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
 
     srand(time(NULL));  // Инициализация случайных чисел
     char buffer[256];
-    FILE* input = fopen(inputFile, "r");
-    if (!input) {
-        perror("Не удалось открыть input.txt");
+    FILE *input_fp = fopen(inputFile, "r");
+    if (input_fp == NULL) {
+        perror("Ошибка открытия входного файла");
         exit(1);
     }
 
-    while (fgets(buffer, sizeof(buffer), input)) {
-        printf("Parent: read line: %s", buffer);
+    // Чтение строк из файла
+    while (fgets(buffer, sizeof(buffer), input_fp)) {
+        // Убираем символ новой строки
+        buffer[strcspn(buffer, "\n")] = 0;
+
+        // Генерация случайного числа для фильтрации
         if (rand() % 100 < 80) {
-            printf("Parent: writing to pipe1\n");
+            printf("Sending to pipe1: %s\n", buffer);  // Отладочное сообщение
             write(pipe1[1], buffer, strlen(buffer));
         } else {
-            printf("Parent: writing to pipe2\n");
+            printf("Sending to pipe2: %s\n", buffer);  // Отладочное сообщение
             write(pipe2[1], buffer, strlen(buffer));
         }
     }
 
-    fclose(input);
-    printf("Parent: closing pipe1 and pipe2\n");
-    close(pipe1[1]);  // Закрываем каналы после отправки всех данных
+    fclose(input_fp);
+
+    // Закрываем концы для записи после отправки данных
+    close(pipe1[1]);
     close(pipe2[1]);
 
-    printf("Parent: waiting for child processes to finish\n");
-    wait(NULL);  // Ожидаем завершения дочерних процессов
-    wait(NULL);
+    // Ожидание завершения дочерних процессов
+    wait(NULL);  // Ждем завершения child1
+    wait(NULL);  // Ждем завершения child2
 }

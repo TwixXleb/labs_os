@@ -47,11 +47,9 @@ jobs:
         run: make build
 
       # Run tests with process check
-      - name: Run tests in background
-        run: |
-          make test &
-          sleep 10
-          ps aux
+      - name: Run tests with timeout
+        run: make test
+        timeout-minutes: 5
 
 
       # Check if output files exist
@@ -65,5 +63,6 @@ jobs:
         run: |
           echo "Contents of output1.txt:"
           cat output1.txt
+          echo " "
           echo "Contents of output2.txt:"
           cat output2.txt
