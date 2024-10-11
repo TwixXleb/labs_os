@@ -35,7 +35,8 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     close(pipe2[0]);
 
     srand(time(NULL));  // Инициализация случайных чисел
-    char buffer[256];
+    char buffer[256];  // Буфер для строки
+
     FILE *input_fp = fopen(inputFile, "r");
     if (input_fp == NULL) {
         perror("Ошибка открытия входного файла");
@@ -44,12 +45,15 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
 
     // Чтение строк из файла
     while (fgets(buffer, sizeof(buffer), input_fp)) {
+        // Очищаем буфер перед каждым чтением
+        memset(buffer, 0, sizeof(buffer));
+
         // Убираем символ новой строки
         buffer[strcspn(buffer, "\n")] = 0;
 
         // Генерация случайного числа для фильтрации
-        int rand_value = rand() % 100;
-        if (rand_value < 80) {
+        int random_value = rand() % 100;
+        if (random_value < 80) {
             printf("Sending to pipe1: %s\n", buffer);  // Отладочное сообщение
             strcat(buffer, "\n");  // Добавляем новую строку
             if (write(pipe1[1], buffer, strlen(buffer)) == -1) {
@@ -62,8 +66,6 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
                 perror("Ошибка записи в pipe2");
             }
         }
-
-        printf("Random value: %d\n", rand_value);  // Отладка генерации случайного числа
     }
 
     fclose(input_fp);
