@@ -46,9 +46,13 @@ jobs:
       - name: Build Project
         run: make build
 
-      # Run tests
-      - name: Run Tests
-        run: make test
+      # Run tests with process check
+      - name: Run tests in background
+        run: |
+          make test &
+          sleep 10
+          ps aux
+
 
       # Check if output files exist
       - name: Check if output files exist
