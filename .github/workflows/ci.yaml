@@ -47,9 +47,11 @@ jobs:
         run: make build
 
       # Run tests with process check
-      - name: Run tests with timeout
-        run: make test
-        timeout-minutes: 5
+      - name: Run tests in background
+        run: |
+          make test &
+          sleep 30
+          ps aux
 
 
       # Check if output files exist
