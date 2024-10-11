@@ -48,13 +48,22 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
         buffer[strcspn(buffer, "\n")] = 0;
 
         // Генерация случайного числа для фильтрации
-        if (rand() % 100 < 80) {
+        int rand_value = rand() % 100;
+        if (rand_value < 80) {
             printf("Sending to pipe1: %s\n", buffer);  // Отладочное сообщение
-            write(pipe1[1], buffer, strlen(buffer));
+            strcat(buffer, "\n");  // Добавляем новую строку
+            if (write(pipe1[1], buffer, strlen(buffer)) == -1) {
+                perror("Ошибка записи в pipe1");
+            }
         } else {
             printf("Sending to pipe2: %s\n", buffer);  // Отладочное сообщение
-            write(pipe2[1], buffer, strlen(buffer));
+            strcat(buffer, "\n");  // Добавляем новую строку
+            if (write(pipe2[1], buffer, strlen(buffer)) == -1) {
+                perror("Ошибка записи в pipe2");
+            }
         }
+
+        printf("Random value: %d\n", rand_value);  // Отладка генерации случайного числа
     }
 
     fclose(input_fp);
