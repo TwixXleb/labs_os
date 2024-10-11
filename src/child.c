@@ -18,6 +18,7 @@ void child_process(int pipe_in, const char* file_name) {
     // Read from pipe and process
     while ((n = read(pipe_in, buffer, sizeof(buffer) - 1)) > 0) {
         buffer[n] = '\0';  // Null terminate the string
+        printf("Child received: %s\n", buffer);  // Отладочное сообщение
         remove_vowels(buffer);  // Process: remove vowels
         write(file_fd, buffer, strlen(buffer));  // Write the result to the file with correct length
     }

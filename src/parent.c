@@ -45,25 +45,20 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
 
     // Чтение строк из файла
     while (fgets(buffer, sizeof(buffer), input_fp)) {
-        // Очищаем буфер перед чтением новой строки
-        memset(buffer, 0, sizeof(buffer));
-
         // Убираем символ новой строки
         buffer[strcspn(buffer, "\n")] = 0;
 
-        // Генерация случайного числа для фильтрации
         int random_value = rand() % 100;
-
         if (random_value < 80) {
             // Отправляем в pipe1
-            printf("Sending to pipe1: %s\n", buffer);  // Отладочное сообщение
+            printf("Parent is sending to pipe1: %s\n", buffer);  // Отладочное сообщение
             strcat(buffer, "\n");  // Добавляем новую строку
             if (write(pipe1[1], buffer, strlen(buffer)) == -1) {
                 perror("Ошибка записи в pipe1");
             }
         } else {
             // Отправляем в pipe2
-            printf("Sending to pipe2: %s\n", buffer);  // Отладочное сообщение
+            printf("Parent is sending to pipe2: %s\n", buffer);  // Отладочное сообщение
             strcat(buffer, "\n");  // Добавляем новую строку
             if (write(pipe2[1], buffer, strlen(buffer)) == -1) {
                 perror("Ошибка записи в pipe2");
