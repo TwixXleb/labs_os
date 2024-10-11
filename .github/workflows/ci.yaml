@@ -1,31 +1,65 @@
-name: Build and Test
+name: Build and Run Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: sudo apt-get install cmake g++
+      # Install googletest
+      - name: Install googletest
+        uses: cvpkg/googletest-action@v0.1
+        with:
+          googletest_tag: 'release-1.11.0'
 
-      - name: Build project
+      # Install Clang-Tidy
+      - name: Install Clang-Tidy
+        run: sudo apt-get install -y clang-tidy
+
+      # Run Clang-Tidy for linting C++ code
+      - name: Run Clang-Tidy
         run: |
-          mkdir build
-          cd build
-          cmake ..
-          make
+          clang-tidy src/*.c -- -I/path/to/your/include/files
 
-      - name: Run tests
+      # Create input file for testing
+      - name: Create input file
         run: |
-          cd build
-          ./main  # Выполнение тестов
+          echo "Hello World" > input.txt
+          echo "This is a test" >> input.txt
+          echo "GoogleTest Example" >> input.txt
+          echo "Remove vowels please" >> input.txt
+          echo "Another random string" >> input.txt
+          echo "Some more text" >> input.txt
+          echo "Just a string" >> input.txt
+          echo "Final line" >> input.txt
 
+      # Build project
+      - name: Build Project
+        run: make build
+
+      # Run tests
+      - name: Run Tests
+        run: make test
+
+      # Check if output files exist
       - name: Check if output files exist
         run: |
           ls -l output1.txt
           ls -l output2.txt
+
+      # Print contents of the output files
+      - name: Print output file contents
+        run: |
+          echo "Contents of output1.txt:"
+          cat output1.txt
+          echo "Contents of output2.txt:"
+          cat output2.txt
