@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/wait.h>
 
-void main(const char* inputFile, const char* file1, const char* file2) {
+void parent_process(const char* inputFile, const char* file1, const char* file2) {
     int pipe1[2], pipe2[2];
 
     // Создаем каналы
@@ -15,10 +15,6 @@ void main(const char* inputFile, const char* file1, const char* file2) {
     }
 
     pid_t child1_pid = fork();
-    if (child1_pid == -1) {
-        perror("Ошибка создания child1");
-        exit(1);
-    }
     if (child1_pid == 0) {
         close(pipe1[1]);  // Закрываем конец для записи
         char pipe_in_str[10];
@@ -29,10 +25,6 @@ void main(const char* inputFile, const char* file1, const char* file2) {
     }
 
     pid_t child2_pid = fork();
-    if (child2_pid == -1) {
-        perror("Ошибка создания child2");
-        exit(1);
-    }
     if (child2_pid == 0) {
         close(pipe2[1]);  // Закрываем конец для записи
         char pipe_in_str[10];
@@ -90,4 +82,14 @@ void main(const char* inputFile, const char* file1, const char* file2) {
     // Ожидание завершения дочерних процессов
     wait(NULL);  // Ждем завершения child1
     wait(NULL);  // Ждем завершения child2
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s <inputFile> <file1> <file2>\n", argv[0]);
+        exit(1);
+    }
+
+    parent_process(argv[1], argv[2], argv[3]);
+    return 0;
 }
