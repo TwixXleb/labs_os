@@ -28,13 +28,8 @@ void child_process(int pipe_in, const char* file_name) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Использование: %s <output_file>\n", argv[0]);
-        return 1;
-    }
 
-    int pipe_in = STDIN_FILENO;  // Ввод из стандартного ввода
-    child_process(pipe_in, argv[1]);
+    child_process(argc, argv[0]);
 
     return 0;
 }
