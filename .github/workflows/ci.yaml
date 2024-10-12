@@ -44,17 +44,15 @@ jobs:
 
       # Build project
       - name: Build Project
-        run: |
-          cmake -S . -B build
-          cmake --build build
+        run: make build
 
       # Run tests with process check
       - name: Run tests in background
         run: |
-          cd build
-          ./test &
+          make test &
           sleep 30
           ps aux
+
 
       # Check if output files exist
       - name: Check if output files exist
