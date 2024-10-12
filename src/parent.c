@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/wait.h>
 
-void parent_process(const char* inputFile, const char* file1, const char* file2) {
+void main(const char* inputFile, const char* file1, const char* file2) {
     int pipe1[2], pipe2[2];
 
     // Создаем каналы
