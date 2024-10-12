@@ -28,7 +28,7 @@ jobs:
       # Run Clang-Tidy for linting C++ code
       - name: Run Clang-Tidy
         run: |
-          clang-tidy src/*.c -- -I/path/to/your/include/files
+          clang-tidy src/*.c -- -Iinclude
 
       # Create input file for testing
       - name: Create input file
@@ -44,15 +44,17 @@ jobs:
 
       # Build project
       - name: Build Project
-        run: make build
+        run: |
+          cmake -S . -B build
+          cmake --build build
 
       # Run tests with process check
       - name: Run tests in background
         run: |
-          make test &
+          cd build
+          ./test &
           sleep 30
           ps aux
-
 
       # Check if output files exist
       - name: Check if output files exist
