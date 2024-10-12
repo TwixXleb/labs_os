@@ -29,7 +29,7 @@ void child_process(int pipe_in, const char* file_name) {
 
 int main(int argc, char *argv[]) {
 
-    child_process(argc, argv[0]);
+    child_process(argc, argv[1]);
 
     return 0;
 }
