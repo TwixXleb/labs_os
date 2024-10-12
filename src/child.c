@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include "../include/utils.h"
 
-int main(int pipe_in, const char* file_name) {
+void child_process(int pipe_in, const char* file_name) {
     char buffer[256];
     int n;
 
