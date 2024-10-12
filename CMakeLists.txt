@@ -41,6 +41,14 @@ add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES})
 add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
+# Основное приложение parent
+add_executable(parent_exe src/parent.c)
+target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+
+# Второй исполняемый файл child
+add_executable(child_exe src/child.c)
+target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+
 # Тестовое приложение
 if (TEST_SOURCES)
     add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})

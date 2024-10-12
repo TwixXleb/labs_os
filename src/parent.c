@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <time.h>
-#include "../include/child.h"
+#include <string.h>
+#include <sys/wait.h>
+#include "../include/parent.h"
 
 void parent_process(const char* inputFile, const char* file1, const char* file2) {
     int pipe1[2], pipe2[2];
@@ -15,27 +15,42 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     }
 
     pid_t child1_pid = fork();
+    if (child1_pid == -1) {
+        perror("Ошибка создания child1");
+        exit(1);
+    }
     if (child1_pid == 0) {
-        close(pipe1[1]);  // Закрываем конец для записи
-        child_process(pipe1[0], file1);
+        // Закрываем конец для записи в дочернем процессе
+        close(pipe1[1]);
+        dup2(pipe1[0], STDIN_FILENO);  // перенаправляем входной поток
         close(pipe1[0]);
-        exit(0);
+
+        // Вызов дочернего процесса через exec
+        execl("./child", "child", file1, NULL);
+        perror("Ошибка exec для child1");
+        exit(1);
     }
 
     pid_t child2_pid = fork();
+    if (child2_pid == -1) {
+        perror("Ошибка создания child2");
+        exit(1);
+    }
     if (child2_pid == 0) {
-        close(pipe2[1]);  // Закрываем конец для записи
-        child_process(pipe2[0], file2);
+        // Закрываем конец для записи в дочернем процессе
+        close(pipe2[1]);
+        dup2(pipe2[0], STDIN_FILENO);  // перенаправляем входной поток
         close(pipe2[0]);
-        exit(0);
+
+        // Вызов дочернего процесса через exec
+        execl("./child", "child", file2, NULL);
+        perror("Ошибка exec для child2");
+        exit(1);
     }
 
-    // Родительский процесс: читает строки из input.txt
+    // Родительский процесс: читает строки из input.txt и передает их через каналы
     close(pipe1[0]);  // Закрываем конец для чтения
     close(pipe2[0]);
-
-    srand(time(NULL));  // Инициализация случайных чисел
-    char buffer[256];  // Буфер для строки
 
     FILE *input_fp = fopen(inputFile, "r");
     if (input_fp == NULL) {
@@ -43,39 +58,25 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
         exit(1);
     }
 
-    // Чтение строк из файла
+    char buffer[256];
     while (fgets(buffer, sizeof(buffer), input_fp)) {
-        // Убираем символ новой строки
         buffer[strcspn(buffer, "\n")] = 0;
 
-        int random_value = rand() % 100;
-        if (random_value < 80) {
-            // Отправляем в pipe1
-            printf("Parent is sending to pipe1: %s\n", buffer);  // Отладочное сообщение
-            strcat(buffer, "\n");  // Добавляем новую строку
-            if (write(pipe1[1], buffer, strlen(buffer)) == -1) {
-                perror("Ошибка записи в pipe1");
-            }
+        if (rand() % 100 < 80) {
+            strcat(buffer, "\n");
+            write(pipe1[1], buffer, strlen(buffer));
         } else {
-            // Отправляем в pipe2
-            printf("Parent is sending to pipe2: %s\n", buffer);  // Отладочное сообщение
-            strcat(buffer, "\n");  // Добавляем новую строку
-            if (write(pipe2[1], buffer, strlen(buffer)) == -1) {
-                perror("Ошибка записи в pipe2");
-            }
+            strcat(buffer, "\n");
+            write(pipe2[1], buffer, strlen(buffer));
         }
-
-        // После записи в канал очищаем буфер
-        memset(buffer, 0, sizeof(buffer));
     }
+
+    close(pipe1[1]);  // Закрываем конец для записи
+    close(pipe2[1]);
 
     fclose(input_fp);
 
-    // Закрываем концы для записи после отправки данных
-    close(pipe1[1]);
-    close(pipe2[1]);
-
     // Ожидание завершения дочерних процессов
-    wait(NULL);  // Ждем завершения child1
-    wait(NULL);  // Ждем завершения child2
+    wait(NULL);
+    wait(NULL);
 }
