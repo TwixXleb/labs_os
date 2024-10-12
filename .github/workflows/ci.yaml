@@ -46,14 +46,6 @@ jobs:
       - name: Build Project
         run: make build
 
-      # Build child executable
-      - name: Build child executable
-        run: make child_exe
-
-      # Build parent executable
-      - name: Build parent executable
-        run: make parent_exe
-
       # Run tests with process check
       - name: Run tests in background
         run: |
