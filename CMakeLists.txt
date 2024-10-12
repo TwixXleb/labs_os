@@ -17,26 +17,14 @@ endif()
 # Подключаем Google Test
 add_subdirectory(lib/googletest)
 
-# Указываем директории для заголовков и исходников
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
-
-include_directories(${INCLUDE_DIR})
-
 # Основное приложение parent
-add_executable(parent_exe ${SOURCE_DIR}/parent.c)
+add_executable(parent_exe src/parent.c)
 
 # Основное приложение child
-add_executable(child_exe ${SOURCE_DIR}/child.c)
+add_executable(child_exe src/child.c)
 
 # Поиск всех тестовых файлов в директории tests
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
-
-# Добавляем исходники для тестов, включая parent.c для тестирования parent_process
-set(TEST_LIB_SOURCES
-        ${SOURCE_DIR}/parent.c  # Исходный файл с реализацией parent_process
-        ${SOURCE_DIR}/child.c   # Если нужно тестировать и child_process
-        )
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false test/*.cpp)
 
 # Создание тестового приложения
 if (TEST_SOURCES)
