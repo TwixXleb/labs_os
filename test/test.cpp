@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../include/parent.h"
 
+// Удаление гласных из строки
 std::string removeVowels(const std::string &input) {
     std::string result;
     for (char c : input) {
@@ -13,8 +14,8 @@ std::string removeVowels(const std::string &input) {
     return result;
 }
 
-TEST(ProcessTest, ChildProcessCommunication) {
-    // Создаём входной файл
+TEST(ProcessTest, ParentChildCommunication) {
+    // Создаём входной файл с тестовыми данными
     std::ofstream input("input.txt");
     input << "TestStringWithVowels\nAnotherTest\n";
     input.close();
