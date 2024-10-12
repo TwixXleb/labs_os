@@ -1,29 +1,27 @@
 #include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include "../include/utils.h"
 
-int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s <output_file>\n", argv[0]);
-        return 1;
+void child_process(int pipe_in, const char* file_name) {
+    char buffer[256];
+    int n;
+
+    // Open the file for writing
+    int file_fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (file_fd == -1) {
+        perror("Failed to open output file");
+        exit(1);
     }
 
-    char buffer[1024];
-    FILE *file;
-
-    // Открытие файла для записи
-    file = fopen(argv[1], "w");
-    if (!file) {
-        perror("Cannot open file for writing");
-        return 1;
+    // Read from pipe and process
+    while ((n = read(pipe_in, buffer, sizeof(buffer) - 1)) > 0) {
+        buffer[n] = '\0';  // Null terminate the string
+        printf("Child received: %s\n", buffer);  // Отладочное сообщение
+        remove_vowels(buffer);  // Process: remove vowels
+        write(file_fd, buffer, strlen(buffer));  // Write the result to the file with correct length
     }
 
-    // Чтение данных из stdin
-    while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-        remove_vowels(buffer); // Удаление гласных из строки
-        fprintf(file, "Processed string: %s\n", buffer);
-    }
-
-    fclose(file);
-    return 0;
+    close(file_fd);
 }
