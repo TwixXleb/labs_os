@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 #include "../include/utils.h"
 
 int main(int argc, char *argv[]) {
