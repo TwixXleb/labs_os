@@ -28,7 +28,7 @@ set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 include_directories(${INCLUDE_DIR})
 
-# Поиск всех исходников в src, исключая файлы с main
+# Поиск всех исходников в src, исключая файлы с main и parent.c
 file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
 list(FILTER LIB_SOURCES EXCLUDE REGEX ".*main\\.c$")
 list(FILTER LIB_SOURCES EXCLUDE REGEX ".*parent\\.c$")
@@ -48,7 +48,7 @@ add_executable(child_exe ${SOURCE_DIR}/child.c ${LIB_SOURCES})
 
 # Тестовое приложение
 if (TEST_SOURCES)
-    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})
+    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${SOURCE_DIR}/parent.c)
     target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
     target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
 else()
