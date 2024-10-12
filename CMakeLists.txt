@@ -28,28 +28,24 @@ set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 include_directories(${INCLUDE_DIR})
 
-# Поиск всех исходников в src
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
+# Поиск вспомогательных исходников (без файлов с main)
+file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/utils.c)
 
-# Поиск всех тестовых файлов в tests
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
-
-# Создание библиотеки из исходников
-add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES})
-
-# Основное приложение
-add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
-target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+# Создание библиотеки из вспомогательных исходников
+add_library(${CMAKE_PROJECT_NAME}_lib ${LIB_SOURCES})
 
 # Основное приложение parent
-add_executable(parent_exe src/parent.c)
+add_executable(parent_exe ${SOURCE_DIR}/parent.c)
 target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Основное приложение child
-add_executable(child_exe src/child.c)
+add_executable(child_exe ${SOURCE_DIR}/child.c)
 target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Тестовое приложение
+# Поиск всех тестовых файлов в директории tests
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
+
+# Создание тестового приложения
 if (TEST_SOURCES)
     add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})
     target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
