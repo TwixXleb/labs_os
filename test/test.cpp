@@ -1,10 +1,9 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <filesystem>
+#include <cstdlib>
 
 extern "C" {
-#include "../include/child.h"  // Функция обработки строк
-#include "../include/parent.h"
 #include "../include/utils.h"
 }
 
@@ -42,7 +41,8 @@ protected:
 
 TEST_F(Lab1Test, ParentChildProcessTest) {
     std::cout << "Starting parent process\n";
-    parent_process(inputFile, outputFile1, outputFile2);
+    std::string command = "./parent " + std::string(inputFile) + " " + std::string(outputFile1) + " " + std::string(outputFile2);
+    std::system(command.c_str());
     std::cout << "Parent process finished\n";
 
     // Проверяем, что выходные файлы созданы
