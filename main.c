@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "include/parent.h"
-#include "include/utils.h"
+#include "include/process_functions.h"
 
 int main() {
     char testStr[] = "Hello World";
