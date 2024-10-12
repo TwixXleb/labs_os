@@ -4,6 +4,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include "../include/utils.h"
+#include "../include/child.h"
 
 void child_process(int pipe_in, const char* file_name) {
     char buffer[256];
@@ -25,15 +26,5 @@ void child_process(int pipe_in, const char* file_name) {
     }
 
     close(file_fd);
-}
-
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <output_file>\n", argv[0]);
-        return 1;
-    }
-
-    child_process(STDIN_FILENO, argv[1]);  // Передаем stdin как pipe_in и argv[1] как имя файла
-    return 0;
 }
 
