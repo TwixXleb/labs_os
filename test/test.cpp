@@ -2,9 +2,9 @@
 #include <fstream>
 #include <filesystem>
 #include <cstdlib>
-#include <string.h>
 
 extern "C" {
+#include "../include/parent.h"
 #include "../include/utils.h"
 }
 
@@ -42,8 +42,7 @@ protected:
 
 TEST_F(Lab1Test, ParentChildProcessTest) {
     std::cout << "Starting parent process\n";
-    std::string command = "./parent " + std::string(inputFile) + " " + std::string(outputFile1) + " " + std::string(outputFile2);
-    std::system(command.c_str());
+    parent_process(inputFile, outputFile1, outputFile2);
     std::cout << "Parent process finished\n";
 
     // Проверяем, что выходные файлы созданы
