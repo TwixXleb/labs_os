@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include <cstdlib>
+#include <string.h>
 
 extern "C" {
 #include "../include/utils.h"
