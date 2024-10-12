@@ -63,10 +63,11 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
         buffer[strcspn(buffer, "\n")] = 0;
 
         if (rand() % 100 < 80) {
-            strcat(buffer, "\n");
+            strncat(buffer, "\n", sizeof(buffer) - strlen(buffer) - 1);
+
             write(pipe1[1], buffer, strlen(buffer));
         } else {
-            strcat(buffer, "\n");
+            strncat(buffer, "\n", sizeof(buffer) - strlen(buffer) - 1);
             write(pipe2[1], buffer, strlen(buffer));
         }
     }

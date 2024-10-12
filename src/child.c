@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <fcntl.h>
 #include "../include/utils.h"
 
@@ -32,7 +33,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    child_process(argv[1]);  // Пример вызова функции child, нужно реализовать в child.c
+    child_process(STDIN_FILENO, argv[1]);  // Передаем stdin как pipe_in и argv[1] как имя файла
     return 0;
 }
 
