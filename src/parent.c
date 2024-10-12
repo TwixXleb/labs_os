@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
-#include "../include/child.h"
+#include <sys/wait.h>
 
 void parent_process(const char* inputFile, const char* file1, const char* file2) {
     int pipe1[2], pipe2[2];
@@ -15,19 +15,31 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     }
 
     pid_t child1_pid = fork();
+    if (child1_pid == -1) {
+        perror("Ошибка создания child1");
+        exit(1);
+    }
     if (child1_pid == 0) {
         close(pipe1[1]);  // Закрываем конец для записи
-        child_process(pipe1[0], file1);
-        close(pipe1[0]);
-        exit(0);
+        char pipe_in_str[10];
+        sprintf(pipe_in_str, "%d", pipe1[0]);
+        execl("./child", "child", pipe_in_str, file1, NULL);
+        perror("Ошибка выполнения exec для child1");
+        exit(1);
     }
 
     pid_t child2_pid = fork();
+    if (child2_pid == -1) {
+        perror("Ошибка создания child2");
+        exit(1);
+    }
     if (child2_pid == 0) {
         close(pipe2[1]);  // Закрываем конец для записи
-        child_process(pipe2[0], file2);
-        close(pipe2[0]);
-        exit(0);
+        char pipe_in_str[10];
+        sprintf(pipe_in_str, "%d", pipe2[0]);
+        execl("./child", "child", pipe_in_str, file2, NULL);
+        perror("Ошибка выполнения exec для child2");
+        exit(1);
     }
 
     // Родительский процесс: читает строки из input.txt
