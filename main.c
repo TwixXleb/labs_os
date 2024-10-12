@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "include/child.h"
 #include "include/parent.h"
 #include "include/utils.h"
 
