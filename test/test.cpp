@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <filesystem>
-#include <cstdlib>
 
 extern "C" {
+#include "../include/child.h"  // Функция обработки строк
 #include "../include/parent.h"
 #include "../include/utils.h"
 }

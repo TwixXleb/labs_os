@@ -41,19 +41,11 @@ add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES})
 add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Дочерний процесс
-add_executable(child ${SOURCE_DIR}/child.c)
-target_link_libraries(child PRIVATE ${CMAKE_PROJECT_NAME}_lib)
-
-# Родительский процесс
-add_executable(parent ${SOURCE_DIR}/parent.c)
-target_link_libraries(parent PRIVATE ${CMAKE_PROJECT_NAME}_lib)
-
 # Тестовое приложение
 if (TEST_SOURCES)
-    add_executable(test ${TEST_SOURCES})
-    target_include_directories(test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-    target_link_libraries(test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
+    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})
+    target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+    target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
 else()
     message(FATAL_ERROR "No test files found in the test directory")
 endif()
