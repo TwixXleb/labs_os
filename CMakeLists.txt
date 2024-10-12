@@ -31,14 +31,22 @@ include_directories(${INCLUDE_DIR})
 # Поиск всех исходников в src
 file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
 
-# Поиск всех тестовых файлов в tests
+# Поиск всех тестовых файлов в test
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
 # Создание библиотеки из исходников
 add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES})
 
+# Создание отдельных исполняемых файлов для parent и child
+add_executable(parent_exe ${SOURCE_DIR}/parent.c)
+add_executable(child_exe ${SOURCE_DIR}/child.c)
+
+# Линковка parent и child с библиотекой
+target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+
 # Основное приложение
-add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
+add_executable(${CMAKE_PROJECT_NAME}_exe main.c include/parent.h)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Тестовое приложение
@@ -49,4 +57,3 @@ if (TEST_SOURCES)
 else()
     message(FATAL_ERROR "No test files found in the test directory")
 endif()
-

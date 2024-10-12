@@ -1,19 +1,7 @@
 #include <gtest/gtest.h>
-#include <stdio.h>
-#include <string>
 #include <fstream>
 #include <iostream>
-#include <unistd.h> // Для получения текущего пути
-
-// Функция, которая будет вызывать процесс parent
-int runParent() {
-    // Получаем абсолютный путь к исполняемому файлу
-    char cwd[1024];
-    getcwd(cwd, sizeof(cwd));  // Получаем текущую директорию
-    std::string command = std::string(cwd) + "/build/parent_exe";  // Собираем полный путь к parent_exe
-
-    return system(command.c_str());
-}
+#include "../include/parent.h"
 
 std::string removeVowels(const std::string &input) {
     std::string result;
@@ -31,8 +19,8 @@ TEST(ProcessTest, ChildProcessCommunication) {
     input << "TestStringWithVowels\nAnotherTest\n";
     input.close();
 
-    // Вызываем parent процесс
-    ASSERT_EQ(runParent(), 0);
+    // Вызываем parent как функцию
+    run_parent("input.txt", "output1.txt", "output2.txt");
 
     // Проверяем, что файлы созданы и содержат ожидаемые данные
     std::ifstream f1("output1.txt"), f2("output2.txt");

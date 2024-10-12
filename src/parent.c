@@ -5,16 +5,11 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <time.h>
+#include "../include/parent.h"
 
-int main() {
+int run_parent(const char *input_file, const char *output_file1, const char *output_file2) {
     int pipe1[2], pipe2[2];
-    char input_file[256] = "input.txt";
-    char output_file1[256] = "output1.txt";
-    char output_file2[256] = "output2.txt";
-
-    // Инициализация генератора случайных чисел
-    srand(time(NULL));
+    char buffer[1024];
 
     // Создание pipe1 и pipe2
     if (pipe(pipe1) == -1 || pipe(pipe2) == -1) {
@@ -28,7 +23,7 @@ int main() {
         // В дочернем процессе child1
         close(pipe1[1]); // Закрываем сторону записи
         dup2(pipe1[0], STDIN_FILENO); // Перенаправляем ввод из pipe1
-        execl("./child", "./child", output_file1, NULL);
+        execl("./child_exe", "./child_exe", output_file1, NULL); // Запуск дочернего процесса
         perror("exec failed for child1");
         return 1;
     } else if (child1_pid < 0) {
@@ -42,7 +37,7 @@ int main() {
         // В дочернем процессе child2
         close(pipe2[1]); // Закрываем сторону записи
         dup2(pipe2[0], STDIN_FILENO); // Перенаправляем ввод из pipe2
-        execl("./child", "./child", output_file2, NULL);
+        execl("./child_exe", "./child_exe", output_file2, NULL); // Запуск дочернего процесса
         perror("exec failed for child2");
         return 1;
     } else if (child2_pid < 0) {
@@ -61,21 +56,17 @@ int main() {
         return 1;
     }
 
-    char buffer[1024];
     while (fgets(buffer, sizeof(buffer), input) != NULL) {
-        // Определяем, в какой pipe отправить строку (80% вероятность для pipe1)
-        if ((rand() % 100) < 80) {
-            write(pipe1[1], buffer, strlen(buffer) + 1);
-        } else {
-            write(pipe2[1], buffer, strlen(buffer) + 1);
-        }
+        // Отправляем строки в pipe1 и pipe2
+        write(pipe1[1], buffer, strlen(buffer) + 1);
+        write(pipe2[1], buffer, strlen(buffer) + 1);
     }
 
-    // Закрываем стороны записи pipe'ов
+    fclose(input);
+
+    // Закрываем стороны записи pipe
     close(pipe1[1]);
     close(pipe2[1]);
-
-    fclose(input);
 
     // Ожидание завершения дочерних процессов
     wait(NULL);
