@@ -19,8 +19,8 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     if (child1_pid == 0) {
         // Дочерний процесс 1
         close(pipe1[1]);  // Закрываем конец для записи
-        dup2(pipe1[0], STDIN_FILENO);  // Перенаправляем ввод из pipe1
-        execl("./child_exe", "./child_exe", file1, NULL);  // Запускаем исполняемый файл child_exe
+        dup2(pipe1[0], STDIN_FILENO);  // Перенаправляем ввод из pipe1 в stdin
+        execl("./child_exe", "./child_exe", file1, NULL);  // Запускаем исполняемый файл child_exe с аргументом file1
         perror("Ошибка exec для child1");
         exit(1);
     }
@@ -29,8 +29,8 @@ void parent_process(const char* inputFile, const char* file1, const char* file2)
     if (child2_pid == 0) {
         // Дочерний процесс 2
         close(pipe2[1]);  // Закрываем конец для записи
-        dup2(pipe2[0], STDIN_FILENO);  // Перенаправляем ввод из pipe2
-        execl("./child_exe", "./child_exe", file2, NULL);  // Запускаем исполняемый файл child_exe
+        dup2(pipe2[0], STDIN_FILENO);  // Перенаправляем ввод из pipe2 в stdin
+        execl("./child_exe", "./child_exe", file2, NULL);  // Запускаем исполняемый файл child_exe с аргументом file2
         perror("Ошибка exec для child2");
         exit(1);
     }
