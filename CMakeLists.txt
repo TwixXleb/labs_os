@@ -1,36 +1,27 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.10)
 
 # Название проекта
-project(OS_LABS C CXX)
+project(ProcessCommunication)
 
-# Устанавливаем стандарт для C и C++
-set(CMAKE_C_STANDARD 11)
+# Стандарт C
+set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 
-# Добавляем опции компиляции только для Linux
-if (UNIX)
-    add_compile_options(-g -rdynamic)
-else()
-    add_compile_options(-g)
-endif()
-
-# Подключаем Google Test
-add_subdirectory(lib/googletest)
-
-# Основное приложение parent
+# Добавляем исполняемые файлы
 add_executable(parent_exe src/parent.c)
+add_executable(child_exe src/child.c src/process_functions.c src/process_functions.h)
 
-# Основное приложение child
-add_executable(child_exe src/child.c)
+# Создание библиотеки для тестов
+add_library(OS_LABS_lib src/process_functions.c)
 
-# Поиск всех тестовых файлов в директории tests
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false test/*.cpp)
+# Линкуем библиотеку с основными программами
+target_link_libraries(parent_exe OS_LABS_lib)
+target_link_libraries(child_exe OS_LABS_lib)
 
-# Создание тестового приложения
-if (TEST_SOURCES)
-    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${TEST_LIB_SOURCES})
-    target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-    target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
-else()
-    message(FATAL_ERROR "No test files found in the test directory")
-endif()
+# Тесты
+enable_testing()
+add_executable(tests test/test.cpp)
+
+# Линкуем тесты с библиотекой и GoogleTest
+target_link_libraries(tests gtest gtest_main OS_LABS_lib)
+add_test(NAME ProcessTests COMMAND tests)
