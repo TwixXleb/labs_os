@@ -4,7 +4,15 @@
 #include <fcntl.h>
 #include "../include/utils.h"
 
-void child_process(int pipe_in, const char* file_name) {
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <pipe_in> <file_name>\n", argv[0]);
+        exit(1);
+    }
+
+    int pipe_in = atoi(argv[1]);
+    const char* file_name = argv[2];
+
     char buffer[256];
     int n;
 
@@ -24,4 +32,6 @@ void child_process(int pipe_in, const char* file_name) {
     }
 
     close(file_fd);
+    close(pipe_in);
+    return 0;
 }
