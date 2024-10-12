@@ -34,22 +34,18 @@ file(GLOB_RECURSE SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
 # Поиск всех тестовых файлов в test
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
-# Добавляем родительский заголовочный файл
-set(PARENT_HEADER ${INCLUDE_DIR}/parent.h)
+# Создание библиотеки из исходников
+add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES})
 
-# Создание библиотеки из исходников, включая parent.c и другие исходники
-add_library(${CMAKE_PROJECT_NAME}_lib ${SOURCES} ${SOURCE_DIR}/parent.c)
-
-# Создание исполняемого файла для родительского процесса (parent.c) — НЕ НУЖЕН, так как parent вызывается как функция
-# add_executable(parent_exe ${SOURCE_DIR}/parent.c)
+# Создание исполняемого файла для родительского процесса (parent.c)
+add_executable(parent_exe ${SOURCE_DIR}/parent.c)
+target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Создание исполняемого файла для дочернего процесса (child.c)
 add_executable(child_exe ${SOURCE_DIR}/child.c)
-
-# Линковка исполняемого файла child_exe с библиотекой
 target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Основное приложение (main.c)
+# Основное приложение
 add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
@@ -57,8 +53,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_li
 if (TEST_SOURCES)
     add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES})
     target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-    # Линкуем с библиотекой и Google Test
     target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
 else()
     message(FATAL_ERROR "No test files found in the test directory")
