@@ -42,10 +42,10 @@ add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Создаем исполняемый файл для родительского процесса (parent)
-add_executable(parent_exe ${SOURCE_DIR}/parent.c)
+add_executable(parent_exe ${SOURCE_DIR}/parent.c ${INCLUDE_DIR}/parent.h)
 
 # Создаем исполняемый файл для дочернего процесса (child)
-add_executable(child_exe ${SOURCE_DIR}/child.c)
+add_executable(child_exe ${SOURCE_DIR}/child.c ${SOURCE_DIR}/utils.c ${INCLUDE_DIR}/utils.h)
 
 # Тестовое приложение
 if (TEST_SOURCES)
