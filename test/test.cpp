@@ -3,11 +3,15 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <unistd.h> // Для получения текущего пути
 
 // Функция, которая будет вызывать процесс parent
 int runParent() {
-    // Указываем полный путь к parent_exe, который создается в build
-    std::string command = "./build/parent_exe";
+    // Получаем абсолютный путь к исполняемому файлу
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));  // Получаем текущую директорию
+    std::string command = std::string(cwd) + "/build/parent_exe";  // Собираем полный путь к parent_exe
+
     return system(command.c_str());
 }
 
