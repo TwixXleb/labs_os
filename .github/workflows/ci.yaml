@@ -28,11 +28,12 @@ jobs:
       # Run Clang-Tidy for linting C++ code
       - name: Run Clang-Tidy
         run: |
-          clang-tidy src/*.c -- -I/path/to/your/include/files
+          clang-tidy src/*.c -- -Iinclude
 
       # Create input file for testing
       - name: Create input file
         run: |
+          touch input.txt
           echo "Hello World" > input.txt
           echo "This is a test" >> input.txt
           echo "GoogleTest Example" >> input.txt
@@ -42,29 +43,43 @@ jobs:
           echo "Just a string" >> input.txt
           echo "Final line" >> input.txt
 
+      # Create output files
+      - name: Create output files
+        run: |
+          touch output1.txt
+          touch output2.txt
+
       # Build project
       - name: Build Project
-        run: make build
+        run: |
+          cmake -S . -B build
+          cmake --build build
 
       # Run tests with process check
       - name: Run tests in background
         run: |
-          make test &
+          cd build
+          ./test &
           sleep 30
           ps aux
-
 
       # Check if output files exist
       - name: Check if output files exist
         run: |
-          ls -l output1.txt
-          ls -l output2.txt
+          ls -l build/output1.txt
+          ls -l build/output2.txt
 
       # Print contents of the output files
       - name: Print output file contents
         run: |
           echo "Contents of output1.txt:"
-          cat output1.txt
+          cat build/output1.txt
           echo " "
           echo "Contents of output2.txt:"
-          cat output2.txt
+          cat build/output2.txt
+
+      # Remove output files
+      - name: Remove output files
+        run: |
+          rm -f output1.txt
+          rm -f output2.txt
