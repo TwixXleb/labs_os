@@ -28,7 +28,7 @@ jobs:
       # Run Clang-Tidy for linting C++ code
       - name: Run Clang-Tidy
         run: |
-          clang-tidy src/*.c -- -Iinclude
+          clang-tidy src/*.c -- -I/path/to/your/include/files
 
       # Create input file for testing
       - name: Create input file
