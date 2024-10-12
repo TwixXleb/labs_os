@@ -25,3 +25,14 @@ void child_process(int pipe_in, const char* file_name) {
 
     close(file_fd);
 }
+
+int main(int argc, char* argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <output_file>\n", argv[0]);
+        return 1;
+    }
+
+    child_process(argv[1]);  // Пример вызова функции child, нужно реализовать в child.c
+    return 0;
+}
+

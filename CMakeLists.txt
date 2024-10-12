@@ -45,7 +45,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_li
 add_executable(parent_exe src/parent.c)
 target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Второй исполняемый файл child
+# Основное приложение child
 add_executable(child_exe src/child.c)
 target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
