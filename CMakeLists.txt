@@ -17,30 +17,17 @@ endif()
 # Подключаем Google Test
 add_subdirectory(lib/googletest)
 
-# Отключаем флаг Werror при сборке Google Test
-set(gtest_disable_pthreads ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
-
 # Указываем директории для заголовков и исходников
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 include_directories(${INCLUDE_DIR})
 
-# Поиск вспомогательных исходников (без файлов с main)
-file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/utils.c)
-
-# Создание библиотеки из вспомогательных исходников
-add_library(${CMAKE_PROJECT_NAME}_lib ${LIB_SOURCES})
-
 # Основное приложение parent
-add_executable(parent_exe ${SOURCE_DIR}/main_parent.c ${SOURCE_DIR}/parent.c)
-target_link_libraries(parent_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+add_executable(parent_exe ${SOURCE_DIR}/parent.c)
 
 # Основное приложение child
-add_executable(child_exe ${SOURCE_DIR}/main_child.c ${SOURCE_DIR}/child.c)
-target_link_libraries(child_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
+add_executable(child_exe ${SOURCE_DIR}/child.c)
 
 # Поиск всех тестовых файлов в директории tests
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
