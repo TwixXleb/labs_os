@@ -6,7 +6,8 @@
 
 // Функция, которая будет вызывать процесс parent
 int runParent() {
-    std::string command = "./parent";
+    // Указываем полный путь к parent_exe, который создается в build
+    std::string command = "./build/parent_exe";
     return system(command.c_str());
 }
 
