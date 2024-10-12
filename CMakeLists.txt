@@ -32,7 +32,6 @@ include_directories(${INCLUDE_DIR})
 file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
 list(FILTER LIB_SOURCES EXCLUDE REGEX ".*main\\.c$")
 list(FILTER LIB_SOURCES EXCLUDE REGEX ".*parent\\.c$")
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*child\\.c$")
 
 # Поиск всех тестовых файлов в tests
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
@@ -43,9 +42,6 @@ add_library(${CMAKE_PROJECT_NAME}_lib ${LIB_SOURCES})
 # Основное приложение
 add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
-
-# Создаем исполняемый файл для родительского процесса (parent)
-add_executable(parent_exe ${SOURCE_DIR}/parent.c ${LIB_SOURCES})
 
 # Создаем исполняемый файл для дочернего процесса (child)
 add_executable(child_exe ${SOURCE_DIR}/child.c ${LIB_SOURCES})
