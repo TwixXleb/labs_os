@@ -10,7 +10,7 @@ run:
 	./build/OS_LABS_exe
 
 test:
-	./build/OS_LABS_test
+	cd build && ./OS_LABS_test
 
 clean-build:
 	rm -rf ./build/

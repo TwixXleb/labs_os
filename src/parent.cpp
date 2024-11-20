@@ -26,6 +26,23 @@ void Parent::run() {
 }
 
 void Parent::createChildren() {
+
+    // Получаем путь к текущему исполняемому файлу
+    char exePath[PATH_MAX];
+    ssize_t len = readlink("/proc/self/exe", exePath, sizeof(exePath) - 1);
+    if (len != -1) {
+        exePath[len] = '\0';
+    } else {
+        perror("readlink");
+        exit(EXIT_FAILURE);
+    }
+
+    // Получаем директорию исполняемого файла
+    std::string dirPath = dirname(exePath);
+
+    // Формируем путь к child_exe
+    std::string childExePath = dirPath + "/child_exe";
+
     // Создание канала для первого дочернего процесса
     if (pipe(pipe1_fd) == -1) {
         std::cerr << "Не удалось создать канал для первого дочернего процесса." << std::endl;
@@ -43,7 +60,7 @@ void Parent::createChildren() {
         dup2(pipe1_fd[0], STDIN_FILENO); // Перенаправляем stdin
         close(pipe1_fd[0]);
 
-        execl("./child", "child", "output1.txt", (char*)NULL);
+        execl(childExePath.c_str(), "child_exe", "output1.txt", (char*)NULL);
         std::cerr << "Ошибка запуска первого дочернего процесса." << std::endl;
         exit(EXIT_FAILURE);
     } else {
@@ -68,7 +85,7 @@ void Parent::createChildren() {
         dup2(pipe2_fd[0], STDIN_FILENO); // Перенаправляем stdin
         close(pipe2_fd[0]);
 
-        execl("./child", "child", "output2.txt", (char*)NULL);
+        execl(childExePath.c_str(), "child_exe", "output2.txt", (char*)NULL);
         std::cerr << "Ошибка запуска второго дочернего процесса." << std::endl;
         exit(EXIT_FAILURE);
     } else {

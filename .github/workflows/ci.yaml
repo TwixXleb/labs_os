@@ -46,8 +46,13 @@ jobs:
       - name: Build Project
         run: make build
 
+      #Check dir
+      - name: Check dir
+        run: |
+          ls
+
       # Run tests
-      - name: Run tests in background
+      - name: Run tests
         run: make test
 
       # Check if output files exist
