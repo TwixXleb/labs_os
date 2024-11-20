@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 
 # Название проекта
-project(OS_LABS C CXX)
+project(OS_LABS CXX)
 
-# Устанавливаем стандарт для C и C++
-set(CMAKE_C_STANDARD 11)
+# Устанавливаем стандарт для C++
 set(CMAKE_CXX_STANDARD 17)
 
 # Добавляем опции компиляции только для Linux

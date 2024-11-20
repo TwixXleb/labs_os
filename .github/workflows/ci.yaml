@@ -49,9 +49,7 @@ jobs:
       # Run tests with process check
       - name: Run tests in background
         run: |
-          make test &
-          sleep 30
-          ps aux
+          make test
 
       # Check if output files exist
       - name: Check if output files exist
