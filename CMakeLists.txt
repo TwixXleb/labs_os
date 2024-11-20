@@ -45,6 +45,11 @@ target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_li
 # Создаем исполняемый файл для дочернего процесса (child)
 add_executable(child_exe ${SOURCE_DIR}/child.cpp ${LIB_SOURCES})
 
+# Копируем файл child_exe в корневую директорию после сборки
+add_custom_command(TARGET child_exe POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:child_exe> ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+
 # Тестовое приложение
 if (TEST_SOURCES)
     add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${SOURCE_DIR}/parent.cpp)
