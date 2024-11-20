@@ -10,10 +10,6 @@ bool isVowel(char c) {
 }
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cerr << "Дочернему процессу требуется имя выходного файла в качестве аргумента." << std::endl;
-        return EXIT_FAILURE;
-    }
 
     std::string outputFileName = argv[1];
     std::ofstream outfile(outputFileName);
