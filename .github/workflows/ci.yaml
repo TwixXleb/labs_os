@@ -15,20 +15,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Install googletest
-      - name: Install googletest
-        uses: cvpkg/googletest-action@v0.1
-        with:
-          googletest_tag: 'release-1.11.0'
-
       # Install Clang-Tidy
       - name: Install Clang-Tidy
-        run: sudo apt-get install -y clang-tidy
+        run: sudo apt-get update && sudo apt-get install -y clang-tidy
 
       # Run Clang-Tidy for linting C++ code
       - name: Run Clang-Tidy
         run: |
-          clang-tidy src/*.c -- -I/path/to/your/include/files
+          clang-tidy src/*.cpp -- -I./include
+
+      # Install googletest
+      - name: Install googletest
+        run: |
+          sudo apt-get update && sudo apt-get install -y libgtest-dev
+          cd /usr/src/gtest
+          sudo cmake .
+          sudo make
+          sudo cp lib/*.a /usr/lib
 
       # Create input file for testing
       - name: Create input file
@@ -42,27 +45,34 @@ jobs:
           echo "Just a string" >> input.txt
           echo "Final line" >> input.txt
 
-      # Build project
+      # Build Project with CMake
       - name: Build Project
-        run: make build
+        run: |
+          mkdir build
+          cp input.txt build/  # Copy input.txt to build directory
+          cd build
+          cmake ..
+          make
 
       # Run tests with process check
-      - name: Run tests in background
+      - name: Run tests and check processes
         run: |
-          make test &
-          sleep 30
+          cd build
+          ctest --output-on-failure &
+          sleep 5
           ps aux
-
 
       # Check if output files exist
       - name: Check if output files exist
         run: |
+          cd build
           ls -l output1.txt
           ls -l output2.txt
 
       # Print contents of the output files
       - name: Print output file contents
         run: |
+          cd build
           echo "Contents of output1.txt:"
           cat output1.txt
           echo " "

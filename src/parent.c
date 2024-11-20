@@ -1,86 +1,118 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <time.h>
-#include <sys/wait.h>
 #include "../include/parent.h"
+#include <iostream>
+#include <fstream>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <cstdlib>
+#include <ctime>
 
-void parent_process(const char* inputFile, const char* file1, const char* file2) {
-    int pipe1[2], pipe2[2];
+Parent::Parent(const std::string& inputFile) : inputFileName(inputFile) {
+        // Инициализация генератора случайных чисел
+        srand(time(0));
+}
 
-    // Создаем каналы
-    if (pipe(pipe1) == -1 || pipe(pipe2) == -1) {
-        perror("Ошибка создания pipe");
-        exit(1);
-    }
+void Parent::run() {
+    createChildren();
+    processStrings();
 
-    pid_t child1_pid = fork();
-    if (child1_pid == 0) {
-        // Дочерний процесс 1
-        close(pipe1[1]);  // Закрываем конец для записи
-        dup2(pipe1[0], STDIN_FILENO);  // Перенаправляем ввод из pipe1 в stdin
-        execl("./child_exe", "./child_exe", file1, NULL);  // Запускаем исполняемый файл child_exe с аргументом file1
-        perror("Ошибка exec для child1");
-        exit(1);
-    }
-
-    pid_t child2_pid = fork();
-    if (child2_pid == 0) {
-        // Дочерний процесс 2
-        close(pipe2[1]);  // Закрываем конец для записи
-        dup2(pipe2[0], STDIN_FILENO);  // Перенаправляем ввод из pipe2 в stdin
-        execl("./child_exe", "./child_exe", file2, NULL);  // Запускаем исполняемый файл child_exe с аргументом file2
-        perror("Ошибка exec для child2");
-        exit(1);
-    }
-
-    // Родительский процесс: читает строки из input.txt
-    close(pipe1[0]);  // Закрываем конец для чтения
-    close(pipe2[0]);
-
-    srand(time(NULL));  // Инициализация случайных чисел
-    char buffer[256];  // Буфер для строки
-
-    FILE *input_fp = fopen(inputFile, "r");
-    if (input_fp == NULL) {
-        perror("Ошибка открытия входного файла");
-        exit(1);
-    }
-
-    // Чтение строк из файла
-    while (fgets(buffer, sizeof(buffer), input_fp)) {
-        // Убираем символ новой строки
-        buffer[strcspn(buffer, "\n")] = 0;
-
-        int random_value = rand() % 100;
-        if (random_value < 80) {
-            // Отправляем в pipe1
-            printf("Parent is sending to pipe1: %s\n", buffer);  // Отладочное сообщение
-            strcat(buffer, "\n");  // Добавляем новую строку
-            if (write(pipe1[1], buffer, strlen(buffer)) == -1) {
-                perror("Ошибка записи в pipe1");
-            }
-        } else {
-            // Отправляем в pipe2
-            printf("Parent is sending to pipe2: %s\n", buffer);  // Отладочное сообщение
-            strcat(buffer, "\n");  // Добавляем новую строку
-            if (write(pipe2[1], buffer, strlen(buffer)) == -1) {
-                perror("Ошибка записи в pipe2");
-            }
-        }
-
-        // После записи в канал очищаем буфер
-        memset(buffer, 0, sizeof(buffer));
-    }
-
-    fclose(input_fp);
-
-    // Закрываем концы для записи после отправки данных
-    close(pipe1[1]);
-    close(pipe2[1]);
+    // Закрытие каналов после передачи данных
+    close(pipe1_fd[1]);
+    close(pipe2_fd[1]);
 
     // Ожидание завершения дочерних процессов
-    wait(NULL);  // Ждем завершения child1
-    wait(NULL);  // Ждем завершения child2
+    int status;
+    waitpid(child1_pid, &status, 0);
+    waitpid(child2_pid, &status, 0);
+}
+
+void Parent::createChildren() {
+    // Создание канала для первого дочернего процесса
+    if (pipe(pipe1_fd) == -1) {
+        std::cerr << "Не удалось создать канал для первого дочернего процесса." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Создание первого дочернего процесса
+    child1_pid = fork();
+    if (child1_pid == -1) {
+        std::cerr << "Не удалось создать первый дочерний процесс." << std::endl;
+        exit(EXIT_FAILURE);
+    } else if (child1_pid == 0) {
+        // В дочернем процессе 1
+        close(pipe1_fd[1]); // Закрываем запись
+        dup2(pipe1_fd[0], STDIN_FILENO); // Перенаправляем stdin
+        close(pipe1_fd[0]);
+
+        execl("./child", "child", "output1.txt", (char*)NULL);
+        std::cerr << "Ошибка запуска первого дочернего процесса." << std::endl;
+        exit(EXIT_FAILURE);
+    } else {
+        // В родительском процессе
+        close(pipe1_fd[0]); // Закрываем чтение
+    }
+
+    // Создание канала для второго дочернего процесса
+    if (pipe(pipe2_fd) == -1) {
+        std::cerr << "Не удалось создать канал для второго дочернего процесса." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    // Создание второго дочернего процесса
+    child2_pid = fork();
+    if (child2_pid == -1) {
+        std::cerr << "Не удалось создать второй дочерний процесс." << std::endl;
+        exit(EXIT_FAILURE);
+    } else if (child2_pid == 0) {
+        // В дочернем процессе 2
+        close(pipe2_fd[1]); // Закрываем запись
+        dup2(pipe2_fd[0], STDIN_FILENO); // Перенаправляем stdin
+        close(pipe2_fd[0]);
+
+        execl("./child", "child", "output2.txt", (char*)NULL);
+        std::cerr << "Ошибка запуска второго дочернего процесса." << std::endl;
+        exit(EXIT_FAILURE);
+    } else {
+        // В родительском процессе
+        close(pipe2_fd[0]); // Закрываем чтение
+    }
+}
+
+void Parent::processStrings() {
+    std::ifstream infile(inputFileName);
+    if (!infile.is_open()) {
+        std::cerr << "Не удалось открыть входной файл: " << inputFileName << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        int randomNumber = rand() % 100;
+        if (randomNumber < 80) {
+            // Отправляем в первый дочерний процесс
+            sendStringToChild(line, 1);
+        } else {
+            // Отправляем во второй дочерний процесс
+            sendStringToChild(line, 2);
+        }
+    }
+    infile.close();
+}
+
+void Parent::sendStringToChild(const std::string& str, int childNum) {
+ssize_t bytes_written;
+if (childNum == 1) {
+bytes_written = write(pipe1_fd[1], str.c_str(), str.length());
+write(pipe1_fd[1], "\n", 1); // Добавляем перенос строки
+if (bytes_written == -1) {
+std::cerr << "Не удалось записать в канал первого дочернего процесса." << std::endl;
+}
+} else if (childNum == 2) {
+bytes_written = write(pipe2_fd[1], str.c_str(), str.length());
+write(pipe2_fd[1], "\n", 1); // Добавляем перенос строки
+if (bytes_written == -1) {
+std::cerr << "Не удалось записать в канал второго дочернего процесса." << std::endl;
+}
+} else {
+std::cerr << "Неверный номер дочернего процесса." << std::endl;
+}
 }
