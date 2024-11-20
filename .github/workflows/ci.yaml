@@ -15,35 +15,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # Install googletest
+      - name: Install googletest
+        uses: cvpkg/googletest-action@v0.1
+        with:
+          googletest_tag: 'release-1.11.0'
+
       # Install Clang-Tidy
       - name: Install Clang-Tidy
         run: sudo apt-get install -y clang-tidy
 
-      # Install Dependencies
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake build-essential libgtest-dev
-
-      # Build Google Test
-      - name: Build Google Test
-        run: |
-          cd /usr/src/gtest
-          sudo cmake .
-          sudo make
-          sudo cp lib/*.a /usr/lib
-
-      # Create build directory and run CMake to generate compile_commands.json
-      - name: Generate Build Files
-        run: |
-          mkdir build
-          cd build
-          cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
-
       # Run Clang-Tidy for linting C++ code
       - name: Run Clang-Tidy
         run: |
-          find src/ include/ test/ -name '*.cpp' -o -name '*.h' | xargs clang-tidy -p build -- -I./include
+          clang-tidy src/*.cpp -- -I/path/to/your/include/files
 
       # Create input file for testing
       - name: Create input file
@@ -59,29 +44,26 @@ jobs:
 
       # Build project
       - name: Build Project
-        run: |
-          cd build
-          cmake ..
-          make
+        run: make build
 
       # Run tests with process check
       - name: Run tests in background
         run: |
-          cd build
-          ctest --output-on-failure & sleep 30
+          make test &
+          sleep 30
           ps aux
 
       # Check if output files exist
       - name: Check if output files exist
         run: |
-          ls -l build/output1.txt
-          ls -l build/output2.txt
+          ls -l output1.txt
+          ls -l output2.txt
 
       # Print contents of the output files
       - name: Print output file contents
         run: |
           echo "Contents of output1.txt:"
-          cat build/output1.txt
+          cat output1.txt
           echo " "
           echo "Contents of output2.txt:"
-          cat build/output2.txt
+          cat output2.txt
