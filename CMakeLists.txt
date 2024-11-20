@@ -1,39 +1,56 @@
-cmake_minimum_required(VERSION 3.10)
-project(ParentChildProcess)
+cmake_minimum_required(VERSION 3.16)
 
-# Установка стандарта C++
+# Название проекта
+project(OS_LABS C CXX)
+
+# Устанавливаем стандарт для C и C++
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Добавляем флаги компиляции для всех целей
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+# Добавляем опции компиляции только для Linux
+if (UNIX)
+    add_compile_options(-g -rdynamic)
+else()
+    add_compile_options(-g)
+endif()
 
-# Указываем директорию заголовочных файлов
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Подключаем Google Test
+add_subdirectory(lib/googletest)
 
-# Добавляем исполняемый файл дочернего процесса
-add_executable(child src/child.c)
+# Отключаем флаг Werror при сборке Google Test
+set(gtest_disable_pthreads ON)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 
-# Добавляем библиотеку с родительским классом
-add_library(parent_lib src/parent.c)
+# Указываем директории для заголовков и исходников
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
-# Добавляем тестовый исполняемый файл
-add_executable(test_exe test/test.cpp)
+include_directories(${INCLUDE_DIR})
 
-# Подключаем заголовочные файлы
-target_include_directories(test_exe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Поиск всех исходников в src, исключая файлы с main и parent.c
+file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*main\\.c$")
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*parent\\.c$")
 
-# Ссылки на библиотеки
-target_link_libraries(test_exe PRIVATE parent_lib)
+# Поиск всех тестовых файлов в tests
+file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 
-# Копируем файл child в рабочую директорию тестов после сборки
-add_custom_command(TARGET test_exe POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:child> ${CMAKE_CURRENT_BINARY_DIR}
-        )
+# Создание библиотеки из исходников
+add_library(${CMAKE_PROJECT_NAME}_lib ${LIB_SOURCES})
 
-# Копируем input.txt в рабочую директорию сборки
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/input.txt ${CMAKE_CURRENT_BINARY_DIR}/input.txt COPYONLY)
+# Основное приложение
+add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
+target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
-# Добавляем тесты
-enable_testing()
-add_test(NAME ParentChildTest COMMAND test_exe)
+# Создаем исполняемый файл для дочернего процесса (child)
+add_executable(child_exe ${SOURCE_DIR}/child.c ${LIB_SOURCES})
+
+# Тестовое приложение
+if (TEST_SOURCES)
+    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${SOURCE_DIR}/parent.c)
+    target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+    target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
+else()
+    message(FATAL_ERROR "No test files found in the test directory")
+endif()
