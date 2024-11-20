@@ -29,9 +29,9 @@ set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 include_directories(${INCLUDE_DIR})
 
 # Поиск всех исходников в src, исключая файлы с main и parent.c
-file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.c)
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*main\\.c$")
-list(FILTER LIB_SOURCES EXCLUDE REGEX ".*parent\\.c$")
+file(GLOB_RECURSE LIB_SOURCES LIST_DIRECTORIES false ${SOURCE_DIR}/*.cpp)
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*main\\.cpp$")
+list(FILTER LIB_SOURCES EXCLUDE REGEX ".*parent\\.cpp$")
 
 # Поиск всех тестовых файлов в tests
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
@@ -40,15 +40,15 @@ file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false ${TEST_DIR}/*.cpp)
 add_library(${CMAKE_PROJECT_NAME}_lib ${LIB_SOURCES})
 
 # Основное приложение
-add_executable(${CMAKE_PROJECT_NAME}_exe main.c)
+add_executable(${CMAKE_PROJECT_NAME}_exe main.cpp)
 target_link_libraries(${CMAKE_PROJECT_NAME}_exe PRIVATE ${CMAKE_PROJECT_NAME}_lib)
 
 # Создаем исполняемый файл для дочернего процесса (child)
-add_executable(child_exe ${SOURCE_DIR}/child.c ${LIB_SOURCES})
+add_executable(child_exe ${SOURCE_DIR}/child.cpp ${LIB_SOURCES})
 
 # Тестовое приложение
 if (TEST_SOURCES)
-    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${SOURCE_DIR}/parent.c)
+    add_executable(${CMAKE_PROJECT_NAME}_test ${TEST_SOURCES} ${SOURCE_DIR}/parent.cpp)
     target_include_directories(${CMAKE_PROJECT_NAME}_test PRIVATE ${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
     target_link_libraries(${CMAKE_PROJECT_NAME}_test PRIVATE ${CMAKE_PROJECT_NAME}_lib gtest gtest_main)
 else()
