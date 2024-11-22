@@ -44,6 +44,7 @@ jobs:
           echo "Some more text" >> input.txt
           echo "Just a string" >> input.txt
           echo "Final line" >> input.txt
+          ls -l input.txt
 
       # Check if input file exist
       - name: Check if input file exist
