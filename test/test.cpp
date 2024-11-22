@@ -16,12 +16,6 @@ std::vector<std::string> read_file(const std::string& filename) {
 
 // Тест для проверки, что строки без гласных записаны в правильные файлы
 TEST(ProcessTest, TestOutputFiles) {
-    // Создаем тестовый input.txt
-    std::ofstream input_file("input.txt");
-    input_file << "Hello\n";
-    input_file << "World\n";
-    input_file << "Test\n";
-    input_file.close();
 
     // Запускаем родительский процесс
     system("./parent");
