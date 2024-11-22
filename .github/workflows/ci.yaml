@@ -78,6 +78,7 @@ jobs:
       # Run tests
       - name: Run tests
         run: |
+          cd build
           sleep 5
           timeout 10s make test || true
 
