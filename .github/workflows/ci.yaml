@@ -56,8 +56,8 @@ jobs:
       # Check if output files exist
       - name: Check if output files exist
         run: |
-          ls -l output1.txt
-          ls -l output2.txt
+          ls -l output_1.txt
+          ls -l output_2.txt
 
       # Build project
       - name: Build Project
