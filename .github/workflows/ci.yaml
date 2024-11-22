@@ -44,21 +44,24 @@ jobs:
           echo "Some more text" >> input.txt
           echo "Just a string" >> input.txt
           echo "Final line" >> input.txt
-          ls -l input.txt
 
       # Check if input file exist
       - name: Check if input file exist
-        run: ls -l input.txt
+        run: |
+          cd build
+          ls -l input.txt
 
       #Create output file for testing
       - name: Create output files
         run: |
+          cd build
           touch output_1.txt
           touch output_2.txt
 
       # Check if output files exist
       - name: Check if output files exist
         run: |
+          cd build
           ls -l output_1.txt
           ls -l output_2.txt
 
