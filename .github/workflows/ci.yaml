@@ -83,8 +83,8 @@ jobs:
       # Check if output files exist
       - name: Check if output files exist
         run: |
-          ls -l output1.txt
-          ls -l output2.txt
+          ls -l output_1.txt
+          ls -l output_2.txt
 
       # Print contents of the output files
       - name: Print output file contents
