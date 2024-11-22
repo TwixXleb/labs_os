@@ -91,8 +91,8 @@ jobs:
       - name: Print output file contents
         run: |
           cd build
-          echo "Contents of output1.txt:"
-          cat output1.txt
+          echo "Contents of output_1.txt:"
+          cat output_1.txt
           echo " "
-          echo "Contents of output2.txt:"
-          cat output2.txt
+          echo "Contents of output_2.txt:"
+          cat output_2.txt
