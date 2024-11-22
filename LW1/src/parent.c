@@ -5,8 +5,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#include <parent.h>
-#include <utils.h>
+#include "../include/parent.h"
+#include "../include/utils.h"
 
 void Parent(const char* pathToChild1, const char* pathToChild2, FILE* stream) {
     int pipe1[2], pipe2[2];

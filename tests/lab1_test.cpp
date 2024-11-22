@@ -6,8 +6,8 @@
 #include <cstring>
 
 extern "C" {
-    #include <utils.h>
-    #include <parent.h>
+    #include "../LW1/include/utils.h"
+    #include "../LW1/include/parent.h"
 }
 
 TEST(test_remove_vowels, test_simple_string)

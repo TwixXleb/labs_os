@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-#include <parent.h>
+#include "/include/parent.h"
 
 int main(void) {
 

@@ -1,6 +1,4 @@
-#include <string.h>
-
-#include <utils.h>
+#include "../include/utils.h"
 
 void remove_vowels(char *str) {
     char *src = str, *dst = str;
