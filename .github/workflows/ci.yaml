@@ -83,12 +83,14 @@ jobs:
       # Check if output files exist
       - name: Check if output files exist
         run: |
+          cd build
           ls -l output_1.txt
           ls -l output_2.txt
 
       # Print contents of the output files
       - name: Print output file contents
         run: |
+          cd build
           echo "Contents of output1.txt:"
           cat output1.txt
           echo " "
