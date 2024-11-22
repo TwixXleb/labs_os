@@ -1,0 +1,4 @@
+ToolSet: w64 12.0 (local)@C:\Users\dshir\mingw64
+Options: 
+
+Options:

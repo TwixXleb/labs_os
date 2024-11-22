@@ -1,0 +1,3 @@
+D:/Projects/CLionProjects/labs_os/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+D:/Projects/CLionProjects/labs_os/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+D:/Projects/CLionProjects/labs_os/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+C:\Users\dshir\mingw64\bin\ar.exe qc libparent.a  CMakeFiles/parent.dir/src/parent.c.obj
+C:\Users\dshir\mingw64\bin\ranlib.exe libparent.a
