@@ -91,6 +91,7 @@ jobs:
       #Check test logs
       - name: Check logs
         run: |
+          cd build
           cat test_output.log
 
       # Print contents of the output files
