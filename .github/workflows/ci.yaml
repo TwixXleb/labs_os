@@ -45,14 +45,6 @@ jobs:
         run: |
           cd build
           touch input.txt
-          echo "Hello World" >> input.txt
-          echo "This is a test" >> input.txt
-          echo "GoogleTest Example" >> input.txt
-          echo "Remove vowels please" >> input.txt
-          echo "Another random string" >> input.txt
-          echo "Some more text" >> input.txt
-          echo "Just a string" >> input.txt
-          echo "Final line" >> input.txt
 
       # Check if input file exist
       - name: Check if input file exist
@@ -60,47 +52,7 @@ jobs:
           cd build
           ls -l input.txt
 
-      #Create output file for testing
-      - name: Create output files
-        run: |
-          cd build
-          touch output_1.txt
-          touch output_2.txt
-
-      # Check if output files exist
-      - name: Check if output files exist
-        run: |
-          cd build
-          touch test_output.log
-          ls -l output_1.txt
-          ls -l output_2.txt
-
       # Run tests
       - name: Run tests
         run: |
-          cd build
-          sleep 5
-          timeout 10s make test || true
-
-      # Check if output files exist
-      - name: Check if output files exist
-        run: |
-          cd build
-          ls -l output_1.txt
-          ls -l output_2.txt
-
-      #Check test logs
-      - name: Check logs
-        run: |
-          cd build
-          cat test_output.log
-
-      # Print contents of the output files
-      - name: Print output file contents
-        run: |
-          cd build
-          echo "Contents of output_1.txt:"
-          cat output_1.txt
-          echo " "
-          echo "Contents of output_2.txt:"
-          cat output_2.txt
+          make test
