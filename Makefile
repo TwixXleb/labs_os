@@ -3,7 +3,7 @@
 build: clean-build
 	git submodule init
 	git submodule update
-	cd ./build && cmake .. && make all
+	cd build && cmake .. && make all
 
 test:
 	cd build && ./test_runner
