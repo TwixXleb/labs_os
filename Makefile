@@ -10,7 +10,7 @@ run:
 	./build/OS_LABS_exe
 
 test:
-	cd build && ./test_runner
+	cd build && ./test_runner > test_output.log 2>&1
 
 clean-build:
 	rm -rf ./build/

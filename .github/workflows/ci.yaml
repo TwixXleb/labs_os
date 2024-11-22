@@ -71,6 +71,7 @@ jobs:
       - name: Check if output files exist
         run: |
           cd build
+          touch test_output.log
           ls -l output_1.txt
           ls -l output_2.txt
 
@@ -86,6 +87,11 @@ jobs:
           cd build
           ls -l output_1.txt
           ls -l output_2.txt
+
+      #Check test logs
+      - name: Check logs
+        run: |
+          cat test_output.log
 
       # Print contents of the output files
       - name: Print output file contents
