@@ -30,10 +30,19 @@ jobs:
         run: |
           clang-tidy src/*.c -- -I/path/to/your/include/files
 
+      # Build project
+      - name: Build Project
+        run: make build
+
+      #Check dir
+      - name: Check dir
+        run: |
+          cd build
+          ls
+
       # Create input file for testing
       - name: Create input file
         run: |
-          mkdir build
           cd build
           touch input.txt
           echo "Hello World" >> input.txt
@@ -64,15 +73,6 @@ jobs:
           cd build
           ls -l output_1.txt
           ls -l output_2.txt
-
-      # Build project
-      - name: Build Project
-        run: make build
-
-      #Check dir
-      - name: Check dir
-        run: |
-          ls
 
       # Run tests
       - name: Run tests
