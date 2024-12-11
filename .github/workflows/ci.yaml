@@ -34,24 +34,6 @@ jobs:
       - name: Build Project
         run: make build
 
-      #Check dir
-      - name: Check dir
-        run: |
-          cd build
-          ls
-
-      # Create input file for testing
-      - name: Create input file
-        run: |
-          cd build
-          touch input.txt
-
-      # Check if input file exist
-      - name: Check if input file exist
-        run: |
-          cd build
-          ls -l input.txt
-
       # Run tests
       - name: Run tests
         run: |

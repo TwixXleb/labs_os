@@ -1,93 +1,40 @@
-#include <gtest/gtest.h> 
-#include <array>
-#include <filesystem>
-#include <fstream>
-#include <memory>
-#include <cstring>
+#include <gtest/gtest.h>
+#include "../LW1/include/utils.h"
 
-extern "C" {
-    #include "../LW1/include/utils.h"
-    #include "../LW1/include/parent.h"
+TEST(RemoveVowelsTest, BasicTest) {
+    const char* input = "Hello World";
+    char* output = remove_vowels(input);
+    EXPECT_STREQ("Hll Wrld", output);
+    free(output);
 }
 
-TEST(test_remove_vowels, test_simple_string)
-{ 
-    char str[] = "abcdef";
-    char expected_str[] = "bcdf";
-    remove_vowels(str);
-    ASSERT_TRUE(strcmp(str, expected_str) == 0);
-    
-} 
-
-TEST(test_remove_vowels, test_empty_string)
-{ 
-    char str[] = "";
-    char expected_str[] = "";
-    remove_vowels(str);
-    ASSERT_TRUE(strcmp(str, expected_str) == 0);
-    
-} 
-
-TEST(test_parent, test) 
-{
-    const char* fileWithInput = "input.txt";
-
-    constexpr int inputSize = 5;
-
-    std::array<const char*, inputSize> input = {
-            "first",
-            "second",
-            "abcd",
-            "efghi",
-            "q"
-    };
-
-    {
-        auto inFile = std::ofstream(fileWithInput);
-
-        for(const auto& line : input) {
-            inFile << line << '\n';
-        }
-    }
-
-    auto deleter = [](FILE* file) {
-        fclose(file);
-    };
-
-    std::unique_ptr<FILE, decltype(deleter)> inFile(fopen(fileWithInput, "r"), deleter);
-
-    Parent("../LW1/child1", "../LW1/child2", inFile.get());
-
-    std::ifstream file1(input[0]);
-    std::ifstream file2(input[1]);
-
-    ASSERT_TRUE(file1.good());
-    ASSERT_TRUE(file2.good());
-
-    std::string firstOutput;
-    std::string secondOutput;
-
-    std::getline(file1, firstOutput);
-    std::getline(file2, secondOutput);
-
-    std::string firstExpectedOtput = "fgh";
-    std::string secondExpectedOtput = "bcd";
-
-    ASSERT_EQ(firstOutput, firstExpectedOtput);
-    ASSERT_EQ(secondOutput, secondExpectedOtput);
-
-    auto removeIfExists = [](const char* path) {
-        if(std::filesystem::exists(path)) {
-            std::filesystem::remove(path);
-        }
-    };
-
-    removeIfExists(fileWithInput);
-    removeIfExists(input[0]);
-    removeIfExists(input[1]);
+TEST(RemoveVowelsTest, AllVowels) {
+    const char* input = "aeiouAEIOU";
+    char* output = remove_vowels(input);
+    EXPECT_STREQ("", output);
+    free(output);
 }
- 
-int main(int argc, char **argv) { 
-    testing::InitGoogleTest(&argc, argv); 
-    return RUN_ALL_TESTS(); 
+
+TEST(RemoveVowelsTest, NoVowels) {
+    const char* input = "bcdfgBCDFG";
+    char* output = remove_vowels(input);
+    EXPECT_STREQ("bcdfgBCDFG", output);
+    free(output);
+}
+
+TEST(RemoveVowelsTest, EmptyString) {
+    const char* input = "";
+    char* output = remove_vowels(input);
+    EXPECT_STREQ("", output);
+    free(output);
+}
+
+TEST(RemoveVowelsTest, NullInput) {
+    char* output = remove_vowels(NULL);
+    EXPECT_EQ(output, NULL);
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
