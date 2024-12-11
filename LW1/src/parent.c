@@ -1,84 +1,107 @@
+#include "../include/utils.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <time.h>
 
-#include "../include/parent.h"
-#include "../include/utils.h"
+char fileName1[MAX_BUFFER];
+char fileName2[MAX_BUFFER];
+char input[MAX_BUFFER];
+fgets(fileName1, MAX_BUFFER, stream);
+fgets(fileName2, MAX_BUFFER, stream);
+fgets(input, MAX_BUFFER, stream);
 
-void Parent(const char* pathToChild1, const char* pathToChild2, FILE* stream) {
-    int pipe1[2], pipe2[2];
-    pid_t pid1, pid2;
-
-    char fileName1[MAX_BUFFER];
-    char fileName2[MAX_BUFFER];
-    char input[MAX_BUFFER];
+int main() {
+    int pipe1[2];
+    int pipe2[2];
 
     if (pipe(pipe1) == -1 || pipe(pipe2) == -1) {
         perror("Pipe failed");
-        exit(-1);
+        exit(1);
     }
 
-    fgets(fileName1, MAX_BUFFER, stream);
-    fileName1[strcspn(fileName1, "\n")] = 0;
-
-    fgets(fileName2, MAX_BUFFER, stream);
-    fileName2[strcspn(fileName2, "\n")] = 0;
-
-    pid1 = fork();
-
+    pid_t pid1 = fork();
     if (pid1 == -1) {
-        perror("fork failed");
-        exit(-1);
+        perror("Fork failed");
+        exit(1);
     }
 
     if (pid1 == 0) {
-        close(pipe1[1]);
+        // Child1 process
+        close(pipe1[1]); // Close write end
+        close(pipe2[0]); // Close unused pipe2 read end
+        close(pipe2[1]); // Close unused pipe2 write end
+
+        // Duplicate pipe1 read end to stdin
         dup2(pipe1[0], STDIN_FILENO);
         close(pipe1[0]);
 
-        execl(pathToChild1, pathToChild1, fileName1, NULL);
-        perror("execl failed");
-        exit(-1);
+        // Open output1 for writing
+        freopen("output1", "w", stdout);
+
+        // Execute child1
+        execl("./child1", "child1", NULL);
+        perror("Exec failed");
+        exit(1);
     }
 
-    pid2 = fork();
-
+    pid_t pid2 = fork();
     if (pid2 == -1) {
-        perror("fork failed");
-        exit(-1);
+        perror("Fork failed");
+        exit(1);
     }
 
     if (pid2 == 0) {
-        close(pipe2[1]);
+        // Child2 process
+        close(pipe2[1]); // Close write end
+        close(pipe1[0]); // Close unused pipe1 read end
+        close(pipe1[1]); // Close unused pipe1 write end
+
+        // Duplicate pipe2 read end to stdin
         dup2(pipe2[0], STDIN_FILENO);
         close(pipe2[0]);
 
-        execl(pathToChild2, pathToChild2, fileName2, NULL);
-        perror("execl failed");
-        exit(-1);
+        // Open output2 for writing
+        freopen("output2", "w", stdout);
+
+        // Execute child2
+        execl("./child2", "child2", NULL);
+        perror("Exec failed");
+        exit(1);
     }
 
-    close(pipe1[0]);
-    close(pipe2[0]);
+    // Parent process
+    close(pipe1[0]); // Close read end
+    close(pipe2[0]); // Close read end
 
-    while (strcmp(input, "q") != 0) {
-        fgets(input, MAX_BUFFER, stream);
-        input[strcspn(input, "\n")] = 0;
+    srand(time(NULL)); // Seed random number generator
 
-        if (strlen(input) % 2 == 1) {
-            write(pipe1[1], input, strlen(input) + 1);
+    // Generate and send strings to children
+    for (int i = 0; i < 10; i++) {
+        char* str = malloc(256);
+        snprintf(str, 256, "String %d", i);
+        int random = rand() % 100;
+
+        if (random < 80) {
+            // Send to child1
+            write(pipe1[1], str, strlen(str)+1);
         } else {
-            write(pipe2[1], input, strlen(input) + 1);
+            // Send to child2
+            write(pipe2[1], str, strlen(str)+1);
         }
-        sleep(1);
+        free(str);
     }
 
+    // Close pipe write ends after sending
     close(pipe1[1]);
     close(pipe2[1]);
 
-    wait(NULL);
-    wait(NULL);
+    // Wait for children to finish
+    waitpid(pid1, NULL, 0);
+    waitpid(pid2, NULL, 0);
+
+    return 0;
 }
