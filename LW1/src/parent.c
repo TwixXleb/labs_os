@@ -5,14 +5,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 #include <time.h>
-
-char fileName1[MY_BUFFER_SIZE];
-char fileName2[MY_BUFFER_SIZE];
-char input[MY_BUFFER_SIZE];
-fgets(fileName1, MY_BUFFER_SIZE, stream);
-fgets(fileName2, MY_BUFFER_SIZE, stream);
-fgets(input, MY_BUFFER_SIZE, stream);
 
 int main() {
     int pipe1[2];
