@@ -1,0 +1,3 @@
+[submodule "cmake-build-debug/_deps/googletest-src"]
+    path = cmake-build-debug/_deps/googletest-src
+    url = https://github.com/google/googletest.git
