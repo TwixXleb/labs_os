@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define MAX_BUFFER 256
+#define MY_BUFFER_SIZE (256)
 
 char* remove_vowels(const char* str);
 

@@ -7,12 +7,12 @@
 #include <sys/wait.h>
 #include <time.h>
 
-char fileName1[MAX_BUFFER];
-char fileName2[MAX_BUFFER];
-char input[MAX_BUFFER];
-fgets(fileName1, MAX_BUFFER, stream);
-fgets(fileName2, MAX_BUFFER, stream);
-fgets(input, MAX_BUFFER, stream);
+char fileName1[MY_BUFFER_SIZE];
+char fileName2[MY_BUFFER_SIZE];
+char input[MY_BUFFER_SIZE];
+fgets(fileName1, MY_BUFFER_SIZE, stream);
+fgets(fileName2, MY_BUFFER_SIZE, stream);
+fgets(input, MY_BUFFER_SIZE, stream);
 
 int main() {
     int pipe1[2];
