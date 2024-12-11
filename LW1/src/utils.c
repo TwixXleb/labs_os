@@ -1,21 +1,22 @@
-#include "../include/utils.h"
+#include <utils.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-char* remove_vowels(const char* str) {
+void remove_vowels(char* str) {
     if (str == NULL) {
-        return NULL;
+        return;
     }
-    const char vowels[] = "aeiouAEIOU";
-    char* result = malloc(strlen(str) + 1);
-    char* ptr = result;
-    while (*str) {
-        if (strchr(vowels, *str) == NULL) {
-            *ptr++ = *str;
+    int i = 0, j = 0;
+    while (str[i] != '\0') {
+        char lower_char = tolower(str[i]);
+        if (lower_char != 'a' && lower_char != 'e' && lower_char != 'i' &&
+            lower_char != 'o' && lower_char != 'u' && lower_char != 'y') {
+            str[j++] = str[i];
         }
-        str++;
+        i++;
     }
-    *ptr = '\0';
-    return result;
+    str[j] = '\0';
+}
 }

@@ -548,9 +548,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="D:/Projects/CLionProjects/labs_os/LW1/include/parent.h">
-			<Option target="parent"/>
-		</Unit>
 		<Unit filename="D:/Projects/CLionProjects/labs_os/LW1/include/utils.h">
 			<Option target="utils"/>
 		</Unit>

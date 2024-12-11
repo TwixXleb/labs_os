@@ -287,8 +287,8 @@ LW1/CMakeFiles/child1.dir/clean:
 # Target rules for target LW1/CMakeFiles/lab1.dir
 
 # All Build rule for target.
-LW1/CMakeFiles/lab1.dir/all: LW1/CMakeFiles/parent.dir/all
 LW1/CMakeFiles/lab1.dir/all: LW1/CMakeFiles/utils.dir/all
+LW1/CMakeFiles/lab1.dir/all: LW1/CMakeFiles/parent.dir/all
 LW1/CMakeFiles/lab1.dir/all: LW1/CMakeFiles/child2.dir/all
 LW1/CMakeFiles/lab1.dir/all: LW1/CMakeFiles/child1.dir/all
 	$(MAKE) -f LW1\CMakeFiles\lab1.dir\build.make LW1/CMakeFiles/lab1.dir/depend
@@ -317,10 +317,10 @@ LW1/CMakeFiles/lab1.dir/clean:
 # Target rules for target tests/CMakeFiles/LW1_test.dir
 
 # All Build rule for target.
-tests/CMakeFiles/LW1_test.dir/all: LW1/CMakeFiles/parent.dir/all
 tests/CMakeFiles/LW1_test.dir/all: LW1/CMakeFiles/utils.dir/all
-tests/CMakeFiles/LW1_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
+tests/CMakeFiles/LW1_test.dir/all: LW1/CMakeFiles/parent.dir/all
 tests/CMakeFiles/LW1_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/all
+tests/CMakeFiles/LW1_test.dir/all: _deps/googletest-build/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/depend
 	$(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=D:\Projects\CLionProjects\labs_os\cmake-build-debug\CMakeFiles --progress-num=1,2 "Built target LW1_test"

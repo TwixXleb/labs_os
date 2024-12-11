@@ -1,17 +1,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-#include "../include/utils.h"
+#include <utils.h>
 
-int main() {
-    char buffer[256];
-    while (fgets(buffer, sizeof(buffer), stdin)) {
-        // Remove newline character
-        buffer[strcspn(buffer, "\n")] = '\0';
-        char* processed = remove_vowels(buffer);
-        fprintf(stdout, "%s\n", processed);
-        free(processed);
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+        exit(1);
     }
+
+    char buffer[MAX_BUFFER];
+    FILE *file = fopen(argv[1], "a");
+    if (!file) {
+        perror("Failed to open file");
+        exit(1);
+    }
+
+    while (read(STDIN_FILENO, buffer, MAX_BUFFER) > 0) {
+        if (strcmp(buffer, "q") == 0) {
+            break;
+        }
+        if (strlen(buffer) > 0) {
+            remove_vowels(buffer);
+
+            fprintf(file, "%s\n", buffer);
+            fflush(file);
+        }
+    }
+
+    fclose(file);
     return 0;
 }
