@@ -1,3 +1,6 @@
 /build/
 /.vscode/
 /.idea/
+/.github/
+/cmake-build-debug/
+/Makefile/
