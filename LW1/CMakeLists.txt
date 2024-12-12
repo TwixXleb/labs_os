@@ -1,4 +1,5 @@
 set(CMAKE_C_STANDARD 11)
+cmake_minimum_required(VERSION 3.16)
 project(mai-os)
 
 add_library(utils include/utils.h src/utils.c)

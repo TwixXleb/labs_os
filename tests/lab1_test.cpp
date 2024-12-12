@@ -13,7 +13,7 @@ extern "C" {
 TEST(test_remove_vowels, test_simple_string)
 {
     char str[] = "abcdef";
-    char expected_str[] = "fedcba";
+    char expected_str[] = "bcdf";
     remove_vowels(str);
     ASSERT_TRUE(strcmp(str, expected_str) == 0);
 
