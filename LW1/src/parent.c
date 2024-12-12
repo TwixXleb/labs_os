@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <time.h>
 
 #include <parent.h>
 #include <utils.h>
@@ -64,13 +65,20 @@ void Parent(const char* pathToChild1, const char* pathToChild2, FILE* stream) {
     close(pipe1[0]);
     close(pipe2[0]);
 
+    srand(time(NULL)); // Инициализация генератора случайных чисел
+
     while (strcmp(input, "q") != 0) {
         fgets(input, MAX_BUFFER, stream);
         input[strcspn(input, "\n")] = 0;
 
-        if (strlen(input) % 2 == 1) {
+        if (strcmp(input, "q") == 0) {
+            break;
+        }
+
+        int chance = rand() % 100; // Генерация случайного числа от 0 до 99
+        if (chance < 80) { // 80% шанс
             write(pipe1[1], input, strlen(input) + 1);
-        } else {
+        } else { // 20% шанс
             write(pipe2[1], input, strlen(input) + 1);
         }
         sleep(1);

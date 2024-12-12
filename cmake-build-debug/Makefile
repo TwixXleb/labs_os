@@ -167,82 +167,43 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named utils
+# Target rules for targets named LW2_utils
 
 # Build rule for target.
-utils: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 utils
-.PHONY : utils
+LW2_utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 LW2_utils
+.PHONY : LW2_utils
 
 # fast build rule for target.
-utils/fast:
-	$(MAKE) -f LW1\CMakeFiles\utils.dir\build.make LW1/CMakeFiles/utils.dir/build
-.PHONY : utils/fast
+LW2_utils/fast:
+	$(MAKE) -f LW2\CMakeFiles\LW2_utils.dir\build.make LW2/CMakeFiles/LW2_utils.dir/build
+.PHONY : LW2_utils/fast
 
 #=============================================================================
-# Target rules for targets named parent
+# Target rules for targets named lab2
 
 # Build rule for target.
-parent: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 parent
-.PHONY : parent
+lab2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 lab2
+.PHONY : lab2
 
 # fast build rule for target.
-parent/fast:
-	$(MAKE) -f LW1\CMakeFiles\parent.dir\build.make LW1/CMakeFiles/parent.dir/build
-.PHONY : parent/fast
+lab2/fast:
+	$(MAKE) -f LW2\CMakeFiles\lab2.dir\build.make LW2/CMakeFiles/lab2.dir/build
+.PHONY : lab2/fast
 
 #=============================================================================
-# Target rules for targets named child2
+# Target rules for targets named LW2_test
 
 # Build rule for target.
-child2: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 child2
-.PHONY : child2
+LW2_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles\Makefile2 LW2_test
+.PHONY : LW2_test
 
 # fast build rule for target.
-child2/fast:
-	$(MAKE) -f LW1\CMakeFiles\child2.dir\build.make LW1/CMakeFiles/child2.dir/build
-.PHONY : child2/fast
-
-#=============================================================================
-# Target rules for targets named child1
-
-# Build rule for target.
-child1: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 child1
-.PHONY : child1
-
-# fast build rule for target.
-child1/fast:
-	$(MAKE) -f LW1\CMakeFiles\child1.dir\build.make LW1/CMakeFiles/child1.dir/build
-.PHONY : child1/fast
-
-#=============================================================================
-# Target rules for targets named lab1
-
-# Build rule for target.
-lab1: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 lab1
-.PHONY : lab1
-
-# fast build rule for target.
-lab1/fast:
-	$(MAKE) -f LW1\CMakeFiles\lab1.dir\build.make LW1/CMakeFiles/lab1.dir/build
-.PHONY : lab1/fast
-
-#=============================================================================
-# Target rules for targets named LW1_test
-
-# Build rule for target.
-LW1_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles\Makefile2 LW1_test
-.PHONY : LW1_test
-
-# fast build rule for target.
-LW1_test/fast:
-	$(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/build
-.PHONY : LW1_test/fast
+LW2_test/fast:
+	$(MAKE) -f tests\CMakeFiles\LW2_test.dir\build.make tests/CMakeFiles/LW2_test.dir/build
+.PHONY : LW2_test/fast
 
 #=============================================================================
 # Target rules for targets named gmock_main
@@ -309,12 +270,9 @@ help:
 	@echo ... edit_cache
 	@echo ... list_install_components
 	@echo ... install/strip
-	@echo ... utils
-	@echo ... parent
-	@echo ... child2
-	@echo ... child1
-	@echo ... lab1
-	@echo ... LW1_test
+	@echo ... LW2_utils
+	@echo ... lab2
+	@echo ... LW2_test
 	@echo ... gmock_main
 	@echo ... gmock
 	@echo ... gtest

@@ -167,46 +167,46 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-tests/CMakeFiles/LW1_test.dir/rule:
-	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f CMakeFiles\Makefile2 tests/CMakeFiles/LW1_test.dir/rule
-.PHONY : tests/CMakeFiles/LW1_test.dir/rule
+tests/CMakeFiles/LW2_test.dir/rule:
+	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f CMakeFiles\Makefile2 tests/CMakeFiles/LW2_test.dir/rule
+.PHONY : tests/CMakeFiles/LW2_test.dir/rule
 
 # Convenience name for target.
-LW1_test: tests/CMakeFiles/LW1_test.dir/rule
+LW2_test: tests/CMakeFiles/LW2_test.dir/rule
 
-.PHONY : LW1_test
+.PHONY : LW2_test
 
 # fast build rule for target.
-LW1_test/fast:
-	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/build
-.PHONY : LW1_test/fast
+LW2_test/fast:
+	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW2_test.dir\build.make tests/CMakeFiles/LW2_test.dir/build
+.PHONY : LW2_test/fast
 
-lab1_test.obj: lab1_test.cpp.obj
+lab2_test.obj: lab2_test.cpp.obj
 
-.PHONY : lab1_test.obj
+.PHONY : lab2_test.obj
 
 # target to build an object file
-lab1_test.cpp.obj:
-	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/lab1_test.cpp.obj
-.PHONY : lab1_test.cpp.obj
+lab2_test.cpp.obj:
+	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW2_test.dir\build.make tests/CMakeFiles/LW2_test.dir/lab2_test.cpp.obj
+.PHONY : lab2_test.cpp.obj
 
-lab1_test.i: lab1_test.cpp.i
+lab2_test.i: lab2_test.cpp.i
 
-.PHONY : lab1_test.i
+.PHONY : lab2_test.i
 
 # target to preprocess a source file
-lab1_test.cpp.i:
-	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/lab1_test.cpp.i
-.PHONY : lab1_test.cpp.i
+lab2_test.cpp.i:
+	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW2_test.dir\build.make tests/CMakeFiles/LW2_test.dir/lab2_test.cpp.i
+.PHONY : lab2_test.cpp.i
 
-lab1_test.s: lab1_test.cpp.s
+lab2_test.s: lab2_test.cpp.s
 
-.PHONY : lab1_test.s
+.PHONY : lab2_test.s
 
 # target to generate assembly for a file
-lab1_test.cpp.s:
-	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW1_test.dir\build.make tests/CMakeFiles/LW1_test.dir/lab1_test.cpp.s
-.PHONY : lab1_test.cpp.s
+lab2_test.cpp.s:
+	cd /d D:\Projects\CLionProjects\labs_os\cmake-build-debug && $(MAKE) -f tests\CMakeFiles\LW2_test.dir\build.make tests/CMakeFiles/LW2_test.dir/lab2_test.cpp.s
+.PHONY : lab2_test.cpp.s
 
 # Help Target
 help:
@@ -214,7 +214,7 @@ help:
 	@echo ... all (the default if no target is provided)
 	@echo ... clean
 	@echo ... depend
-	@echo ... LW1_test
+	@echo ... LW2_test
 	@echo ... rebuild_cache
 	@echo ... test
 	@echo ... install/local
@@ -222,9 +222,9 @@ help:
 	@echo ... edit_cache
 	@echo ... list_install_components
 	@echo ... install/strip
-	@echo ... lab1_test.obj
-	@echo ... lab1_test.i
-	@echo ... lab1_test.s
+	@echo ... lab2_test.obj
+	@echo ... lab2_test.i
+	@echo ... lab2_test.s
 .PHONY : help
 
 

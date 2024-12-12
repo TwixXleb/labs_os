@@ -5,7 +5,7 @@
 		<Option title="googletest-distribution"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\_deps\;CMake Files\cmake-build-debug\_deps\googletest-src\;CMake Files\cmake-build-debug\_deps\googletest-src\googlemock\;CMake Files\cmake-build-debug\_deps\googletest-src\googlemock\cmake\;CMake Files\cmake-build-debug\_deps\googletest-src\googletest\;CMake Files\cmake-build-debug\_deps\googletest-src\googletest\cmake\;CMake Files\LW1\;CMake Files\tests\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\_deps\;CMake Files\cmake-build-debug\_deps\googletest-src\;CMake Files\cmake-build-debug\_deps\googletest-src\googlemock\;CMake Files\cmake-build-debug\_deps\googletest-src\googlemock\cmake\;CMake Files\cmake-build-debug\_deps\googletest-src\googletest\;CMake Files\cmake-build-debug\_deps\googletest-src\googletest\cmake\;CMake Files\LW2\;CMake Files\tests\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="D:/Projects/CLionProjects/labs_os/cmake-build-debug/_deps/googletest-build"/>
@@ -252,8 +252,8 @@
 		<Unit filename="D:/Projects/CLionProjects/labs_os/cmake-build-debug/_deps/googletest-src/googletest/cmake/internal_utils.cmake">
 			<Option virtualFolder="CMake Files\cmake-build-debug\_deps\googletest-src\googletest\cmake\"/>
 		</Unit>
-		<Unit filename="D:/Projects/CLionProjects/labs_os/LW1/CMakeLists.txt">
-			<Option virtualFolder="CMake Files\LW1\"/>
+		<Unit filename="D:/Projects/CLionProjects/labs_os/LW2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\LW2\"/>
 		</Unit>
 		<Unit filename="D:/Projects/CLionProjects/labs_os/tests/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\tests\"/>
