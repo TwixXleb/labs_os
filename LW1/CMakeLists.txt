@@ -5,7 +5,7 @@ project(mai-os)
 add_library(utils include/utils.h src/utils.c)
 target_include_directories(utils PRIVATE include)
 
-add_library(parent src/parent.c)
+add_library(parent include/parent.h src/parent.c)
 target_include_directories(parent PRIVATE include)
 target_link_libraries(parent utils)
 
