@@ -19,4 +19,3 @@ void remove_vowels(char* str) {
     }
     str[j] = '\0';
 }
-}

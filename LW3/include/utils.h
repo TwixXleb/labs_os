@@ -4,6 +4,6 @@
 const static int MAX_BUFFER = 256;
 const static  int MEM_SIZE = 1024;
 
-void ReverseString(char *str);
+void remove_vowels(char *str);
 
 #endif

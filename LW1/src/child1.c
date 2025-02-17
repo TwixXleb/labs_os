@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         }
         if (strlen(buffer) > 0) {
             remove_vowels(buffer);
-
+            
             fprintf(file, "%s\n", buffer);
             fflush(file);
         }

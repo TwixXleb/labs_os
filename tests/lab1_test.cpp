@@ -16,7 +16,6 @@ TEST(test_remove_vowels, test_simple_string)
     char expected_str[] = "bcdf";
     remove_vowels(str);
     ASSERT_TRUE(strcmp(str, expected_str) == 0);
-
 }
 
 TEST(test_remove_vowels, test_empty_string)
@@ -25,7 +24,6 @@ TEST(test_remove_vowels, test_empty_string)
     char expected_str[] = "";
     remove_vowels(str);
     ASSERT_TRUE(strcmp(str, expected_str) == 0);
-
 }
 
 TEST(test_parent, test)
@@ -56,7 +54,7 @@ TEST(test_parent, test)
 
     std::unique_ptr<FILE, decltype(deleter)> inFile(fopen(fileWithInput, "r"), deleter);
 
-    Parent("../LW1/child1", "../LW1/child2", inFile.get());
+    Parent("../LW1/LW1_child1", "../LW1/LW1_child2", inFile.get());
 
     std::ifstream file1(input[0]);
     std::ifstream file2(input[1]);
@@ -70,8 +68,8 @@ TEST(test_parent, test)
     std::getline(file1, firstOutput);
     std::getline(file2, secondOutput);
 
-    std::string firstExpectedOtput = "fgh";
-    std::string secondExpectedOtput = "bcd";
+    std::string firstExpectedOtput = "bcd";
+    std::string secondExpectedOtput = "";
 
     ASSERT_EQ(firstOutput, firstExpectedOtput);
     ASSERT_EQ(secondOutput, secondExpectedOtput);

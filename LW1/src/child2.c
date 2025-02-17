@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     while (read(STDIN_FILENO, buffer, MAX_BUFFER) > 0) {
         if (strlen(buffer) > 0) {
             remove_vowels(buffer);
-
+            
             fprintf(file, "%s\n", buffer);
             fflush(file);
         }
